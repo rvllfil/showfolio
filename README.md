@@ -1,4 +1,3 @@
-````
 # showfolio
 
 **showfolio** is an open-source, headless portfolio starter kit built with **Next.js** and **Strapi**.
@@ -47,7 +46,7 @@ With showfolio, you can:
 
 Recommended monorepo structure using **server** and **client**:
 
-```bash
+````bash
 showfolio/
 ├── server/              # Strapi (API / CMS)
 │   ├── src/
@@ -64,7 +63,6 @@ showfolio/
 ├── .gitignore
 ├── README.md            # this file
 └── LICENSE
-````
 
 ---
 
@@ -86,7 +84,7 @@ From the project root:
 ```bash
 cd server
 npm install
-```
+````
 
 > If you haven’t created the Strapi app yet, you can scaffold it with:
 >
@@ -298,4 +296,5 @@ If you use it in your own studio or client work, a star on GitHub ⭐ is always 
 ```
 
 ```
+
 # showfolio
