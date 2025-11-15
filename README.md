@@ -292,9 +292,3 @@ This project is licensed under the **MIT License** – see the [`LICENSE`](LICEN
 showfolio is built as a flexible starter for studios, agencies, and freelancers who want a clean, headless portfolio built on **Next.js + Strapi**.
 
 If you use it in your own studio or client work, a star on GitHub ⭐ is always appreciated!
-
-```
-
-```
-
-# showfolio
