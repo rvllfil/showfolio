@@ -1,0 +1,16 @@
+{
+  "collectionName": "components_global_portofolio_numbers",
+  "info": {
+    "displayName": "Portofolio Number"
+  },
+  "options": {},
+  "attributes": {
+    "label": {
+      "type": "string"
+    },
+    "value": {
+      "type": "string"
+    }
+  },
+  "config": {}
+}

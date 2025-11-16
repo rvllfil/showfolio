@@ -1,0 +1,72 @@
+{
+  "kind": "collectionType",
+  "collectionName": "portofolios",
+  "info": {
+    "singularName": "portofolio",
+    "pluralName": "portofolios",
+    "displayName": "Portofolio"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "title": {
+      "type": "string"
+    },
+    "slug": {
+      "type": "uid",
+      "targetField": "title"
+    },
+    "workType": {
+      "type": "enumeration",
+      "enum": [
+        "Real",
+        "Dummy"
+      ]
+    },
+    "shortDescription": {
+      "type": "text"
+    },
+    "detailedDescription": {
+      "type": "blocks"
+    },
+    "problem": {
+      "type": "blocks"
+    },
+    "solution": {
+      "type": "blocks"
+    },
+    "role": {
+      "type": "string"
+    },
+    "year": {
+      "type": "string"
+    },
+    "portofolioType": {
+      "type": "enumeration",
+      "enum": [
+        "landing_page",
+        "commerce",
+        "web_app"
+      ]
+    },
+    "techTags": {
+      "type": "component",
+      "component": "global.tech-tags",
+      "repeatable": true
+    },
+    "isFeatured": {
+      "type": "boolean"
+    },
+    "liveUrl": {
+      "type": "string"
+    },
+    "githubUrl": {
+      "type": "string"
+    },
+    "clientName": {
+      "type": "string"
+    }
+  }
+}

@@ -1,0 +1,27 @@
+{
+  "collectionName": "components_global_tech_tags",
+  "info": {
+    "displayName": "Tech Tags"
+  },
+  "options": {},
+  "attributes": {
+    "name": {
+      "type": "string"
+    },
+    "slug": {
+      "type": "string",
+      "unique": false
+    },
+    "category": {
+      "type": "enumeration",
+      "enum": [
+        "frontend",
+        "backend",
+        "cms",
+        "ecommerce",
+        "tool"
+      ]
+    }
+  },
+  "config": {}
+}

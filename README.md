@@ -1,27 +1,32 @@
 # showfolio
 
-**showfolio** is an open-source, headless portfolio starter kit built with **Next.js** and **Strapi**.
-It’s designed for studios, agencies, and freelancers who want a reusable, multi-brand portfolio system that’s easy to customize and deploy.
+**showfolio** is an open-source, headless portfolio starter kit built with:
+
+- **Server:** Strapi (API / CMS)
+- **Client:** Next.js + Tailwind CSS + shadcn/ui
+
+It’s designed for studios, agencies, and freelancers who want a **faceless, studio-style portfolio** that showcases real and concept work, with theming powered by shadcn.
 
 With showfolio, you can:
 
 - Showcase **real** and **concept** work in a clean, minimal layout
-- Manage content through **Strapi** (Portfolio Items, Brands, Skills, Tech Tags, etc.)
-- Support **multiple brands** using the same backend
+- Manage content through **Strapi** (`Profile`, `PortfolioItem`, `Skill`, components like `social_link` & `tech_tag`, etc.)
 - Use **Next.js** for a fast, SEO-friendly frontend
-- Prepare for **theming** in the future (dark/light/custom themes)
+- Use **shadcn/ui** for consistent, themeable UI components
+- Prepare for future **multi-theme** support without rewriting components
 
 ---
 
 ## ✨ Features
 
-- 🧱 **Headless portfolio system** – Strapi as API (**server**), Next.js as frontend (**client**)
-- 🏷️ **Portfolio items** – Real work and concept work, with tags and types
-- 🏢 **Brand support** – One or many brands (e.g. multiple studios, client-facing portfolios)
-- 🧩 **Tech tags & skills** – Reusable tech stack labels and capability descriptions
+- 🧱 **Headless portfolio system** – Strapi as CMS (server), Next.js as UI (client)
+- 🎭 **Real + concept work** – `workType` for real client projects vs concept/dummy projects
+- 🧩 **Tech tags as components** – `tech_tag` component repeatable di `PortfolioItem` (bukan collection)
+- 🔗 **Social links as components** – `social_link` component repeatable di `Profile` untuk semua kontak & sosial media
+- 🧾 **Single studio profile** – All studio identity lives in a single `Profile` (no Brand / ContactSettings single type)
 - 🌍 **Multi-language ready** – Built to work with Strapi i18n (e.g. `en`, `id`)
-- 🎯 **SEO-friendly** – Clean URLs, SSR/SSG with Next.js
-- 🎨 **Theme-ready** – Uses design tokens / CSS variables so themes can be added later
+- 🎯 **SEO-friendly** – Clean URLs, SSR/SSG/ISR with Next.js
+- 🎨 **Theme-ready with shadcn/ui** – Uses shadcn design tokens + CSS variables for colors, radius, etc.
 - 🚀 **Open source** – Free to use, extend, and contribute
 
 ---
@@ -32,7 +37,9 @@ With showfolio, you can:
 
 - [Next.js](https://nextjs.org/)
 - React
-- (Optional) Tailwind CSS or your CSS framework of choice
+- [Tailwind CSS](https://tailwindcss.com/)
+- [shadcn/ui](https://ui.shadcn.com/)
+- [next-themes](https://github.com/pacocoursey/next-themes) for theme class management
 
 **Server (API / CMS)**
 
@@ -44,25 +51,28 @@ With showfolio, you can:
 
 ## 📁 Project Structure
 
-Recommended monorepo structure using **server** and **client**:
+Monorepo layout using **server** and **client**:
 
-````bash
+```bash
 showfolio/
 ├── server/              # Strapi (API / CMS)
 │   ├── src/
 │   ├── config/
 │   ├── package.json
 │   └── README.md
-├── client/              # Next.js app
+├── client/              # Next.js app (Tailwind + shadcn/ui)
 │   ├── app/ or pages/
 │   ├── components/
+│   ├── lib/
 │   ├── public/
+│   ├── styles/ or globals.css
 │   ├── package.json
 │   └── README.md
 ├── docker-compose.yml   # (optional) docker setup
 ├── .gitignore
 ├── README.md            # this file
 └── LICENSE
+```
 
 ---
 
@@ -77,37 +87,40 @@ showfolio/
 
 ---
 
-## 2. Server (Strapi) Setup
+## 2. Server Setup (Strapi)
 
 From the project root:
 
 ```bash
 cd server
-npm install
-````
+```
 
-> If you haven’t created the Strapi app yet, you can scaffold it with:
->
-> ```bash
-> npx create-strapi-app@latest . --quickstart
-> ```
+If you haven’t created the Strapi app yet:
+
+```bash
+npx create-strapi-app@latest . --quickstart
+```
+
+> This will use SQLite by default for development.
+
+Install dependencies (if needed):
+
+```bash
+npm install
+```
 
 ### 2.1 Environment
 
-For development, you can use the default SQLite database.
-
-Create a `.env` file in `server/` (or use Strapi’s default):
+Create a `.env` file in `server/` (example):
 
 ```env
-# Example (adjust as needed)
 APP_KEYS=someRandomAppKey,someOtherKey
 API_TOKEN_SALT=someRandomSalt
 ADMIN_JWT_SECRET=someRandomSecret
 JWT_SECRET=someRandomJwtSecret
-
-# DB (for SQLite dev, Strapi can auto-configure)
-# For Postgres/MySQL, configure in config/database.ts or via env
 ```
+
+For dev, Strapi can auto-configure SQLite. For Postgres/MySQL in production, configure in `config/database.*` or via env vars.
 
 ### 2.2 Run Strapi (dev mode)
 
@@ -115,149 +128,286 @@ JWT_SECRET=someRandomJwtSecret
 npm run develop
 ```
 
-- Strapi admin will be available at: `http://localhost:1337/admin`
+- Strapi Admin: `http://localhost:1337/admin`
 - Create your admin user on first launch.
 
-### 2.3 Content Types (overview)
+---
 
-showfolio uses these core content types:
+## 2.3 Content Types & Components Overview
 
-- **Single Types**
+showfolio uses:
 
-  - `Profile` – Brand name, tagline, about, services, CTAs, etc.
-  - `ContactSettings` – Email, WhatsApp, social links, contact note.
+### Single Types
 
-- **Collection Types**
+- **`Profile`**
+  Studio identity (brand name, tagline, about, services, CTAs, etc.)
 
-  - `Brand` – Brand/studio identity (supports multi-brand).
-  - `PortfolioItem` – Each portfolio entry (real or concept work).
-  - `TechTag` – Tech stack tags (Laravel, Next.js, Strapi, Shopify, etc.).
-  - `Skill` (optional) – Capabilities grouped by category.
+  - includes repeatable `social_link` components for contact & social media.
 
-> Make sure to enable **i18n** in Strapi if you want multi-language content.
+### Collection Types
 
-### 2.4 API Permissions
+- **`PortfolioItem`**
+  Each portfolio entry (real or concept work), includes repeatable `tech_tag` components.
+
+- **`Skill`** (optional)
+  Describes studio skills/capabilities (used on About/Services section).
+
+### Components
+
+- **`shared.social_link`** (component)
+  Used as a **repeatable component in `Profile`** for contact/social links.
+
+  Suggested fields:
+
+  - `label` (string) – e.g. “Email”, “GitHub”, “LinkedIn”
+  - `platform` (string / enum) – e.g. `email`, `github`, `linkedin`, `x`, `website` (optional)
+  - `url` (string) – e.g. `mailto:...`, `https://github.com/...`
+  - `iconKey` (string) – for mapping to an icon in the client (e.g. `github`, `mail`, `linkedin`)
+
+- **`shared.tech_tag`** (component)
+  Used as a **repeatable component in `PortfolioItem`** to describe the tech stack.
+
+  Suggested fields:
+
+  - `name` (string) – e.g. “Next.js”, “Strapi”, “Laravel”
+  - `category` (enum, optional) – `frontend`, `backend`, `cms`, `ecommerce`, `tool`
+
+> You can adjust the component category (`shared`, `global`, etc.) to your preference in Strapi.
+
+### 2.4 Public API Permissions
 
 In Strapi admin:
 
 1. Go to **Settings → Users & Permissions Plugin → Roles → Public**
 2. Enable `find` / `findOne` for:
 
-   - `PortfolioItem`
-   - `Brand`
-   - `TechTag`
    - `Profile`
-   - `ContactSettings`
+   - `PortfolioItem`
+   - `Skill` (if you use it)
 
 3. Save your changes.
 
+Components (`social_link`, `tech_tag`) will be included inside the JSON of `Profile` / `PortfolioItem`.
+
 ---
 
-## 3. Client (Next.js) Setup
+## 3. Client Setup (Next.js + shadcn/ui)
 
 From the project root:
 
 ```bash
 cd client
+```
+
+If you haven’t created the Next.js app yet:
+
+```bash
+npx create-next-app@latest . --typescript
+# Choose: Tailwind CSS = yes (recommended)
+```
+
+Install dependencies:
+
+```bash
 npm install
 ```
 
-> If you haven’t created the Next.js app yet, you can scaffold it with:
->
-> ```bash
-> npx create-next-app@latest . --typescript
-> ```
+### 3.1 Setup shadcn/ui
 
-### 3.1 Environment
+From `client/`:
+
+```bash
+npx shadcn-ui@latest init
+```
+
+Follow the prompts (components directory, style setup, etc.).
+
+Add some base components, e.g.:
+
+```bash
+npx shadcn-ui@latest add button card input badge
+```
+
+### 3.2 Environment for API URL
 
 Create `.env.local` in `client/`:
 
 ```env
 NEXT_PUBLIC_API_URL=http://localhost:1337
-# e.g. in production: https://api.yourdomain.com
+# In production, you might use: https://api.yourdomain.com
 ```
 
-(Optional) Add any extra env variables you need later for analytics, etc.
+### 3.3 Basic API Helper
 
-### 3.2 Run Next.js (dev mode)
+Example `client/lib/api.ts`:
+
+```ts
+const API_URL = process.env.NEXT_PUBLIC_API_URL;
+
+export async function fetchAPI(path: string, options: RequestInit = {}) {
+  const url = `${API_URL}${path}`;
+  const res = await fetch(url, {
+    ...options,
+    next: { revalidate: 60 }, // ISR revalidation (adjust as needed)
+  });
+
+  if (!res.ok) {
+    throw new Error(`Failed to fetch ${url}`);
+  }
+
+  return res.json();
+}
+```
+
+### 3.4 Run Next.js (dev mode)
 
 ```bash
 npm run dev
 ```
 
-- Client will be available at: `http://localhost:3000`
+- Client: `http://localhost:3000`
 
-### 3.3 Routing (MVP)
+### 3.5 Routing (MVP)
 
-Default routes:
+Recommended routes:
 
-- `/` – Home (hero, about, featured portfolio, contact CTA)
-- `/portfolio` – All portfolio items, with filters
-- `/portfolio/[slug]` – Portfolio item detail
-- `/about` – About page (or simply a section on `/`)
-- `/contact` – Contact page (or section)
+- `/` – Home (hero, about teaser, featured portfolio, contact CTA)
+- `/portfolio` – All portfolio items, with basic filters
+- `/portfolio/[slug]` – Portfolio detail page
+- `/about` – About (or integrated into `/`)
+- `/contact` – Contact (or integrated into `/`)
 
 ---
 
 ## 🧱 Data Model (Conceptual)
 
-### Brand
+### `Profile` (Single Type)
 
-Represents a studio/identity.
+Represents the studio/brand using showfolio.
 
-- `name`, `slug`, `description`, `website`, `logo`
-- (Future) link to `Theme`
+- `brandName` (string)
+- `tagline` (string, localized)
+- `shortIntro` (text / rich text, localized)
+- `about` (rich text, localized)
+- `studioNumbers` (repeatable component, optional):
 
-### PortfolioItem
+  - `label` (e.g. “Projects”, “Stacks”)
+  - `value` (e.g. “6+”, “4”)
 
-Represents a piece of work.
+- `services` (text / rich text or structured list, localized)
+- `primaryCtaLabel` (string, localized)
+- `secondaryCtaLabel` (string, localized)
+- `socialLinks` (**repeatable `social_link` component**):
 
-- `title`, `slug`
-- `workType` (`real` | `concept`)
-- `shortDescription`, `detailedDescription`
-- `problem`, `solution`
-- `role`
-- `year`
-- `portfolioType` (`website` | `web_app` | `ecommerce` | …)
-- `techTags` (many-to-many)
+  - `label`, `platform`, `url`, `iconKey`
+
+### `PortfolioItem` (Collection Type)
+
+Represents each work item.
+
+- `title` (string, localized)
+- `slug` (UID)
+- `workType` (enum: `real`, `concept`)
+- `shortDescription` (text, localized)
+- `detailedDescription` (rich text, localized)
+- `problem` (text / rich text, localized)
+- `solution` (text / rich text, localized)
+- `role` (text, localized)
+- `year` (integer)
+- `portfolioType` (enum: e.g. `website`, `web_app`, `ecommerce`, etc.)
+- `techTags` (**repeatable `tech_tag` component**):
+
+  - `name`, `category`
+
 - `isFeatured` (boolean)
-- `coverImage`, `gallery`
-- `liveUrl`, `githubUrl`
-- `brand` (relation → `Brand`)
+- `coverImage` (media)
+- `gallery` (media[], optional)
+- `liveUrl` (string, optional)
+- `githubUrl` (string, optional)
+- `clientName` (string, optional – plain text label for client name)
 
-### TechTag
+### `Skill` (Collection Type, optional)
 
-Reusable technology labels.
-
-- `name`, `slug`, `category` (frontend/backend/cms/ecommerce/tool)
-
----
-
-## 🎨 Theming (Future)
-
-MVP is **theme-ready**, but only ships with a default theme.
-
-- Uses **CSS variables / design tokens** for colors, card backgrounds, border radius, etc.
-- Components should use semantic classes (e.g. `bg-page`, `text-page`) instead of hardcoded colors.
-
-Planned extension:
-
-- Add `Theme` collection type in Strapi:
-
-  - `primaryColor`, `backgroundColor`, `textColor`, `cardColor`, `radius`, etc.
-  - Link `Brand` → `Theme` to have per-brand themes.
+- `name` (string)
+- `category` (enum: `backend`, `frontend`, `cms`, `ecommerce`, `tool`)
+- `description` (text, localized)
+- `order` (integer, for sorting)
 
 ---
 
-## 🗺️ Roadmap (suggested)
+## 🎨 Theming with shadcn/ui
 
-- [ ] Initial MVP (Strapi server + Next.js client, single brand)
-- [ ] Demo content for a sample studio brand
-- [ ] Basic filters on `/portfolio` (type, tech stack, portfolio type)
-- [ ] Improve SEO (OG images for portfolio items)
-- [ ] Add theme system (code-based, then CMS-driven)
-- [ ] Add contact form (email sending)
-- [ ] Add blogging / case study support (optional)
+showfolio uses **shadcn/ui** on top of Tailwind, with **CSS variables** as design tokens.
+
+### 1. Design Tokens (CSS Variables)
+
+In `client/app/globals.css` (or equivalent), follow shadcn conventions:
+
+- Base tokens (HSL):
+
+  - `--background`, `--foreground`
+  - `--primary`, `--primary-foreground`
+  - `--muted`, `--muted-foreground`
+  - `--card`, `--card-foreground`
+  - `--border-radius` (custom for showfolio, e.g. `1rem` or `20px`)
+
+The **default theme** is a **dark minimal studio theme**:
+
+- Dark page background
+- Light foreground text
+- A single accent `--primary` color for CTAs and highlights
+- Softer `--card` background for portfolio cards and sections
+
+shadcn/ui components (Button, Card, Badge, etc.) consume these variables automatically.
+
+### 2. ThemeProvider & next-themes
+
+Use [`next-themes`](https://github.com/pacocoursey/next-themes) to apply theme classes:
+
+- A `ThemeProvider` wraps the app and sets a default theme class (e.g. `dark`).
+- In `RootLayout`, wrap children in `<ThemeProvider>`.
+
+MVP behavior:
+
+- Default theme = **dark** (studio look).
+- System theme detection and theme toggles are optional add-ons.
+
+### 3. Future Multi-Theme Support
+
+While MVP ships with a single theme, the setup allows:
+
+- Defining additional theme variants:
+
+  ```css
+  .theme-minimal-dark {
+    /* override tokens */
+  }
+  .theme-soft-light {
+    /* override tokens */
+  }
+  ```
+
+- Applying these classes on `<body>` manually, or later via:
+
+  - A UI toggle, or
+  - A CMS field (e.g. theme key in `Profile`) that selects which class to apply.
+
+This means:
+
+> You can add more themes later **without changing most components**, only the tokens.
+
+---
+
+## 🗺️ Roadmap (Suggested)
+
+- [ ] Initial MVP (Strapi server + Next.js client, single studio profile)
+- [ ] Create demo content (Profile, social links, a few PortfolioItems, Skills)
+- [ ] Implement portfolio filters on `/portfolio` (workType, techTags, portfolioType)
+- [ ] Improve SEO (OG images for portfolio items, better meta tags)
+- [ ] Extract theme tokens into a clear, documented theme config
+- [ ] Add contact form & email sending (server or external service)
+- [ ] Add long-form content (blog / case studies)
+- [ ] Add optional testimonials section
 
 Feel free to open issues or PRs to extend this roadmap.
 
@@ -268,16 +418,32 @@ Feel free to open issues or PRs to extend this roadmap.
 Contributions are welcome! 🎉
 
 1. Fork the repository
-2. Create a new branch: `git checkout -b feature/your-feature-name`
-3. Commit your changes: `git commit -m "Add some feature"`
-4. Push the branch: `git push origin feature/your-feature-name`
+
+2. Create a new branch:
+
+   ```bash
+   git checkout -b feature/your-feature-name
+   ```
+
+3. Commit your changes:
+
+   ```bash
+   git commit -m "Add some feature"
+   ```
+
+4. Push the branch:
+
+   ```bash
+   git push origin feature/your-feature-name
+   ```
+
 5. Open a Pull Request
 
-Please try to:
+Please:
 
 - Keep the code style consistent
-- Update documentation where needed
-- Add small notes to explain bigger architectural decisions
+- Update documentation when needed
+- Add short comments for non-trivial architectural decisions
 
 ---
 
@@ -289,6 +455,18 @@ This project is licensed under the **MIT License** – see the [`LICENSE`](LICEN
 
 ## 💬 Credits
 
-showfolio is built as a flexible starter for studios, agencies, and freelancers who want a clean, headless portfolio built on **Next.js + Strapi**.
+**showfolio** is built as a flexible starter for studios, agencies, and freelancers who want a clean, headless portfolio built on:
+
+- Strapi (server)
+- Next.js + Tailwind + shadcn/ui (client)
 
 If you use it in your own studio or client work, a star on GitHub ⭐ is always appreciated!
+
+```
+
+Kalau kamu mau, habis ini kita bisa bikin:
+
+- list field final untuk **component `social_link` dan `tech_tag`** persis sesuai form Strapi (step-by-step di UI), atau
+- checklist TODO di GitHub Issues berdasarkan README ini.
+::contentReference[oaicite:0]{index=0}
+```

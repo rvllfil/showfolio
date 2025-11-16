@@ -1,0 +1,52 @@
+{
+  "kind": "singleType",
+  "collectionName": "profiles",
+  "info": {
+    "singularName": "profile",
+    "pluralName": "profiles",
+    "displayName": "Profile"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "brandName": {
+      "type": "string"
+    },
+    "tagline": {
+      "type": "string"
+    },
+    "short_info": {
+      "type": "text"
+    },
+    "about": {
+      "type": "blocks"
+    },
+    "services": {
+      "type": "blocks"
+    },
+    "primaryCtaLabel": {
+      "type": "string"
+    },
+    "primaryCtaUrl": {
+      "type": "string"
+    },
+    "secondaryCtaLabel": {
+      "type": "string"
+    },
+    "secondaryCtaUrl": {
+      "type": "string"
+    },
+    "social_links": {
+      "type": "component",
+      "component": "global.social-links",
+      "repeatable": true
+    },
+    "portofolio_number": {
+      "type": "component",
+      "component": "global.portofolio-number",
+      "repeatable": true
+    }
+  }
+}
