@@ -1,7 +1,8 @@
 {
-  "collectionName": "components_global_portofolio_numbers",
+  "kind": "component",
+  "collectionName": "components_global_portfolio_numbers",
   "info": {
-    "displayName": "Portofolio Number"
+    "displayName": "Portfolio Number"
   },
   "options": {},
   "attributes": {

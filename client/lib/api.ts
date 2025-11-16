@@ -61,12 +61,7 @@ export async function getProfile(
 export async function getPortfolioItems(): Promise<
   StrapiCollectionResponse<Portfolio>
 > {
-  const query = new URLSearchParams({
-    "populate[techTags]": "*",
-    sort: "year:desc",
-  });
-
-  return fetchAPI(`/api/portofolios?${query.toString()}`);
+  return fetchAPI("/api/portfolios?populate[techTags]=*&sort=year:desc");
 }
 
 // Ambil featured portfolio items
@@ -79,10 +74,10 @@ export async function getFeaturedPortfolio(): Promise<
     sort: "year:desc",
   });
 
-  return fetchAPI(`/api/portofolios?${query.toString()}`);
+  return fetchAPI(`/api/portfolios?${query.toString()}`);
 }
 
-// Ambil satu PortfolioItem by slug
+// Ambil portfolio item berdasarkan slug
 export async function getPortfolioItemBySlug(
   slug: string
 ): Promise<Portfolio | null> {
@@ -91,13 +86,8 @@ export async function getPortfolioItemBySlug(
     "populate[techTags]": "*",
   });
 
-  const data: StrapiCollectionResponse<Portfolio> = await fetchAPI(
-    `/api/portofolios?${query.toString()}`
-  );
-
-  // format response Strapi v4: { data: [...] }
-  if (!data?.data?.length) return null;
-  return data.data[0];
+  const response = await fetchAPI(`/api/portfolios?${query.toString()}`);
+  return response.data?.[0] || null;
 }
 
 // Ambil semua Skills

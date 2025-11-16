@@ -430,12 +430,13 @@ export interface AdminUser extends Struct.CollectionTypeSchema {
   };
 }
 
-export interface ApiPortofolioPortofolio extends Struct.CollectionTypeSchema {
-  collectionName: 'portofolios';
+export interface ApiPortfolioPortfolio extends Struct.CollectionTypeSchema {
+  collectionName: 'portfolios';
   info: {
-    displayName: 'Portofolio';
-    pluralName: 'portofolios';
-    singularName: 'portofolio';
+    description: 'Portfolio items showcasing projects and work';
+    displayName: 'Portfolio';
+    pluralName: 'portfolios';
+    singularName: 'portfolio';
   };
   options: {
     draftAndPublish: true;
@@ -447,29 +448,32 @@ export interface ApiPortofolioPortofolio extends Struct.CollectionTypeSchema {
       Schema.Attribute.Private;
     detailedDescription: Schema.Attribute.Blocks;
     githubUrl: Schema.Attribute.String;
-    isFeatured: Schema.Attribute.Boolean;
+    isFeatured: Schema.Attribute.Boolean & Schema.Attribute.DefaultTo<false>;
     liveUrl: Schema.Attribute.String;
     locale: Schema.Attribute.String & Schema.Attribute.Private;
     localizations: Schema.Attribute.Relation<
       'oneToMany',
-      'api::portofolio.portofolio'
+      'api::portfolio.portfolio'
     > &
       Schema.Attribute.Private;
-    portofolioType: Schema.Attribute.Enumeration<
-      ['landing_page', 'commerce', 'web_app']
+    portfolioImages: Schema.Attribute.Media<'images', true>;
+    portfolioType: Schema.Attribute.Enumeration<
+      ['website', 'landing_page', 'commerce', 'ecommerce', 'web_app']
     >;
     problem: Schema.Attribute.Blocks;
     publishedAt: Schema.Attribute.DateTime;
     role: Schema.Attribute.String;
     shortDescription: Schema.Attribute.Text;
-    slug: Schema.Attribute.UID<'title'>;
+    slug: Schema.Attribute.UID<'title'> & Schema.Attribute.Required;
     solution: Schema.Attribute.Blocks;
     techTags: Schema.Attribute.Component<'global.tech-tags', true>;
-    title: Schema.Attribute.String;
+    thumbnail: Schema.Attribute.Media<'images'>;
+    title: Schema.Attribute.String & Schema.Attribute.Required;
     updatedAt: Schema.Attribute.DateTime;
     updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
-    workType: Schema.Attribute.Enumeration<['Real', 'Dummy']>;
+    workType: Schema.Attribute.Enumeration<['real', 'dummy']> &
+      Schema.Attribute.DefaultTo<'real'>;
     year: Schema.Attribute.String;
   };
 }
@@ -490,6 +494,11 @@ export interface ApiProfileProfile extends Struct.SingleTypeSchema {
     createdAt: Schema.Attribute.DateTime;
     createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
+    darkLogo: Schema.Attribute.Media<'images' | 'files' | 'videos' | 'audios'>;
+    lightLogo: Schema.Attribute.Media<
+      'images' | 'files' | 'videos' | 'audios',
+      true
+    >;
     locale: Schema.Attribute.String & Schema.Attribute.Private;
     localizations: Schema.Attribute.Relation<
       'oneToMany',
@@ -497,7 +506,7 @@ export interface ApiProfileProfile extends Struct.SingleTypeSchema {
     > &
       Schema.Attribute.Private;
     portfolioNumber: Schema.Attribute.Component<
-      'global.portofolio-number',
+      'global.portfolio-number',
       true
     >;
     primaryCtaLabel: Schema.Attribute.String;
@@ -1055,7 +1064,7 @@ declare module '@strapi/strapi' {
       'admin::transfer-token': AdminTransferToken;
       'admin::transfer-token-permission': AdminTransferTokenPermission;
       'admin::user': AdminUser;
-      'api::portofolio.portofolio': ApiPortofolioPortofolio;
+      'api::portfolio.portfolio': ApiPortfolioPortfolio;
       'api::profile.profile': ApiProfileProfile;
       'api::skill.skill': ApiSkillSkill;
       'plugin::content-releases.release': PluginContentReleasesRelease;

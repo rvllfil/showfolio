@@ -1,9 +1,9 @@
 import type { Schema, Struct } from '@strapi/strapi';
 
-export interface GlobalPortofolioNumber extends Struct.ComponentSchema {
-  collectionName: 'components_global_portofolio_numbers';
+export interface GlobalPortfolioNumber extends Struct.ComponentSchema {
+  collectionName: 'components_global_portfolio_numbers';
   info: {
-    displayName: 'Portofolio Number';
+    displayName: 'Portfolio Number';
   };
   attributes: {
     label: Schema.Attribute.String;
@@ -40,7 +40,7 @@ export interface GlobalTechTags extends Struct.ComponentSchema {
 declare module '@strapi/strapi' {
   export module Public {
     export interface ComponentSchemas {
-      'global.portofolio-number': GlobalPortofolioNumber;
+      'global.portfolio-number': GlobalPortfolioNumber;
       'global.social-links': GlobalSocialLinks;
       'global.tech-tags': GlobalTechTags;
     }

@@ -1,4 +1,5 @@
 {
+  "kind": "component",
   "collectionName": "components_global_tech_tags",
   "info": {
     "displayName": "Tech Tags"
@@ -14,13 +15,7 @@
     },
     "category": {
       "type": "enumeration",
-      "enum": [
-        "frontend",
-        "backend",
-        "cms",
-        "ecommerce",
-        "tool"
-      ]
+      "enum": ["frontend", "backend", "cms", "ecommerce", "tool"]
     }
   },
   "config": {}

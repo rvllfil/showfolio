@@ -45,8 +45,18 @@
     },
     "portfolioNumber": {
       "type": "component",
-      "component": "global.portofolio-number",
+      "component": "global.portfolio-number",
       "repeatable": true
+    },
+    "lightLogo": {
+      "type": "media",
+      "multiple": true,
+      "allowedTypes": ["images", "files", "videos", "audios"]
+    },
+    "darkLogo": {
+      "type": "media",
+      "multiple": false,
+      "allowedTypes": ["images", "files", "videos", "audios"]
     }
   }
 }

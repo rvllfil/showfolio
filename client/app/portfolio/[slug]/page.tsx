@@ -21,7 +21,7 @@ export default async function PortfolioDetailPage({
     <>
       <SiteHeader />
 
-      <main className="mx-auto max-w-4xl px-4 py-12">
+      <main className="max-w-4xl px-4 py-12 mx-auto">
         {/* Back link */}
         <div className="mb-8">
           <Link
@@ -34,7 +34,7 @@ export default async function PortfolioDetailPage({
 
         {/* Project header */}
         <div className="mb-12">
-          <div className="mb-4 flex items-center gap-2 text-sm text-muted-foreground">
+          <div className="flex items-center gap-2 mb-4 text-sm text-muted-foreground">
             <span className="rounded-sm bg-muted px-2 py-0.5 capitalize">
               {item.workType?.toLowerCase() || "project"}
             </span>
@@ -58,7 +58,7 @@ export default async function PortfolioDetailPage({
         </div>
 
         {/* Project details grid */}
-        <div className="mb-12 grid gap-8 md:grid-cols-3">
+        <div className="grid gap-8 mb-12 md:grid-cols-3">
           <div>
             <h3 className="mb-2 text-sm font-medium">Role</h3>
             <p className="text-sm text-muted-foreground">{item.role}</p>
@@ -98,7 +98,7 @@ export default async function PortfolioDetailPage({
         {/* Project content placeholder */}
         <div className="space-y-8">
           {/* Cover image placeholder */}
-          <div className="aspect-video rounded-lg bg-muted"></div>
+          <div className="rounded-lg aspect-video bg-muted"></div>
 
           {/* Detailed description */}
           {item.detailedDescription && item.detailedDescription.length > 0 && (
@@ -120,13 +120,13 @@ export default async function PortfolioDetailPage({
         </div>
 
         {/* Links */}
-        <div className="mt-12 flex gap-4">
+        <div className="flex gap-4 mt-12">
           {item.liveUrl && (
             <a
               href={item.liveUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="rounded-lg border bg-primary px-4 py-2 text-sm text-primary-foreground transition-colors hover:bg-primary/90"
+              className="px-4 py-2 text-sm transition-colors border rounded-lg bg-primary text-primary-foreground hover:bg-primary/90"
             >
               Visit Live Site
             </a>
@@ -137,7 +137,7 @@ export default async function PortfolioDetailPage({
               href={item.githubUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="rounded-lg border px-4 py-2 text-sm transition-colors hover:bg-muted"
+              className="px-4 py-2 text-sm transition-colors border rounded-lg hover:bg-muted"
             >
               View Code
             </a>

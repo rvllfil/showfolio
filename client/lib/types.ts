@@ -89,7 +89,7 @@ export interface Portfolio {
   solution: StrapiBlock[];
   role: string;
   year: string;
-  portofolioType: "landing_page" | "commerce" | "web_app";
+  portfolioType: "landing_page" | "commerce" | "web_app";
   techTags?: TechTag[];
   isFeatured: boolean;
   liveUrl?: string;

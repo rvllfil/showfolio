@@ -1,10 +1,11 @@
 {
   "kind": "collectionType",
-  "collectionName": "portofolios",
+  "collectionName": "portfolios",
   "info": {
-    "singularName": "portofolio",
-    "pluralName": "portofolios",
-    "displayName": "Portofolio"
+    "singularName": "portfolio",
+    "pluralName": "portfolios",
+    "displayName": "Portfolio",
+    "description": "Portfolio items showcasing projects and work"
   },
   "options": {
     "draftAndPublish": true
@@ -12,18 +13,18 @@
   "pluginOptions": {},
   "attributes": {
     "title": {
-      "type": "string"
+      "type": "string",
+      "required": true
     },
     "slug": {
       "type": "uid",
-      "targetField": "title"
+      "targetField": "title",
+      "required": true
     },
     "workType": {
       "type": "enumeration",
-      "enum": [
-        "Real",
-        "Dummy"
-      ]
+      "enum": ["real", "dummy"],
+      "default": "real"
     },
     "shortDescription": {
       "type": "text"
@@ -43,21 +44,18 @@
     "year": {
       "type": "string"
     },
-    "portofolioType": {
+    "portfolioType": {
       "type": "enumeration",
-      "enum": [
-        "landing_page",
-        "commerce",
-        "web_app"
-      ]
+      "enum": ["website", "landing_page", "commerce", "ecommerce", "web_app"]
     },
     "techTags": {
       "type": "component",
-      "component": "global.tech-tags",
-      "repeatable": true
+      "repeatable": true,
+      "component": "global.tech-tags"
     },
     "isFeatured": {
-      "type": "boolean"
+      "type": "boolean",
+      "default": false
     },
     "liveUrl": {
       "type": "string"
@@ -67,6 +65,16 @@
     },
     "clientName": {
       "type": "string"
+    },
+    "thumbnail": {
+      "type": "media",
+      "multiple": false,
+      "allowedTypes": ["images"]
+    },
+    "portfolioImages": {
+      "type": "media",
+      "multiple": true,
+      "allowedTypes": ["images"]
     }
   }
 }
