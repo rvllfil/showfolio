@@ -69,13 +69,24 @@ export async function getPortfolioItems(): Promise<
   return fetchAPI(`/api/portofolios?${query.toString()}`);
 }
 
+// Ambil featured portfolio items
+export async function getFeaturedPortfolio(): Promise<
+  StrapiCollectionResponse<Portfolio>
+> {
+  const query = new URLSearchParams({
+    "filters[isFeatured][$eq]": "true",
+    "populate[techTags]": "*",
+    sort: "year:desc",
+  });
+
+  return fetchAPI(`/api/portofolios?${query.toString()}`);
+}
+
 // Ambil satu PortfolioItem by slug
 export async function getPortfolioItemBySlug(
-  slug: string,
-  locale: string = "id"
+  slug: string
 ): Promise<Portfolio | null> {
   const query = new URLSearchParams({
-    locale,
     "filters[slug][$eq]": slug,
     "populate[techTags]": "*",
   });
