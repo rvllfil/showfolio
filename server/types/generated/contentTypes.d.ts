@@ -496,7 +496,7 @@ export interface ApiProfileProfile extends Struct.SingleTypeSchema {
       'api::profile.profile'
     > &
       Schema.Attribute.Private;
-    portofolio_number: Schema.Attribute.Component<
+    portfolioNumber: Schema.Attribute.Component<
       'global.portofolio-number',
       true
     >;
@@ -506,8 +506,8 @@ export interface ApiProfileProfile extends Struct.SingleTypeSchema {
     secondaryCtaLabel: Schema.Attribute.String;
     secondaryCtaUrl: Schema.Attribute.String;
     services: Schema.Attribute.Blocks;
-    short_info: Schema.Attribute.Text;
-    social_links: Schema.Attribute.Component<'global.social-links', true>;
+    shortInfo: Schema.Attribute.Text;
+    socialLinks: Schema.Attribute.Component<'global.social-links', true>;
     tagline: Schema.Attribute.String;
     updatedAt: Schema.Attribute.DateTime;
     updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &

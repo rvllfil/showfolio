@@ -1,3 +1,11 @@
+import type {
+  StrapiResponse,
+  StrapiCollectionResponse,
+  Profile,
+  Portfolio,
+  Skill,
+} from "./types";
+
 const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
 // Opsional: cek kalau API_URL belum di-set
@@ -37,19 +45,24 @@ export async function fetchAPI(
 }
 
 // Ambil Profile (single type)
-export async function getProfile(locale: string = "id") {
+export async function getProfile(
+  locale: string = "id"
+): Promise<StrapiResponse<Profile>> {
   const query = new URLSearchParams({
     locale,
-    "populate[social_links]": "*",
-    "populate[portofolio_number]": "*",
+    "populate[socialLinks]": "*",
+    "populate[portfolioNumber]": "*",
   });
 
   return fetchAPI(`/api/profile?${query.toString()}`);
 }
 
 // Ambil semua PortfolioItem
-export async function getPortfolioItems() {
+export async function getPortfolioItems(): Promise<
+  StrapiCollectionResponse<Portfolio>
+> {
   const query = new URLSearchParams({
+    "populate[techTags]": "*",
     sort: "year:desc",
   });
 
@@ -60,18 +73,27 @@ export async function getPortfolioItems() {
 export async function getPortfolioItemBySlug(
   slug: string,
   locale: string = "id"
-) {
+): Promise<Portfolio | null> {
   const query = new URLSearchParams({
     locale,
     "filters[slug][$eq]": slug,
-    "populate[coverImage]": "*",
-    "populate[gallery]": "*",
     "populate[techTags]": "*",
   });
 
-  const data = await fetchAPI(`/api/portofolios?${query.toString()}`);
+  const data: StrapiCollectionResponse<Portfolio> = await fetchAPI(
+    `/api/portofolios?${query.toString()}`
+  );
 
   // format response Strapi v4: { data: [...] }
   if (!data?.data?.length) return null;
   return data.data[0];
+}
+
+// Ambil semua Skills
+export async function getSkills(): Promise<StrapiCollectionResponse<Skill>> {
+  const query = new URLSearchParams({
+    sort: "order:asc",
+  });
+
+  return fetchAPI(`/api/skills?${query.toString()}`);
 }

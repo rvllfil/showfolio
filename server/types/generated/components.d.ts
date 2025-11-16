@@ -17,7 +17,7 @@ export interface GlobalSocialLinks extends Struct.ComponentSchema {
     displayName: 'Social Links';
   };
   attributes: {
-    icon_key: Schema.Attribute.String;
+    iconKey: Schema.Attribute.String;
     label: Schema.Attribute.String;
     url: Schema.Attribute.String;
   };

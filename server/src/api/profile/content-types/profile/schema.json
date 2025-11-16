@@ -17,7 +17,7 @@
     "tagline": {
       "type": "string"
     },
-    "short_info": {
+    "shortInfo": {
       "type": "text"
     },
     "about": {
@@ -38,12 +38,12 @@
     "secondaryCtaUrl": {
       "type": "string"
     },
-    "social_links": {
+    "socialLinks": {
       "type": "component",
       "component": "global.social-links",
       "repeatable": true
     },
-    "portofolio_number": {
+    "portfolioNumber": {
       "type": "component",
       "component": "global.portofolio-number",
       "repeatable": true

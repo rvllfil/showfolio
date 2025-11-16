@@ -1,17 +1,12 @@
 import { getProfile, getPortfolioItems } from "@/lib/api";
-
-type PortfolioItem = {
-  id: string | number;
-  title?: string;
-  shortDescription?: string;
-};
+import type { Portfolio } from "@/lib/types";
 
 export default async function HomePage() {
   const profile = await getProfile("id");
   const portfolio = await getPortfolioItems();
 
   const profileData = profile?.data;
-  const items = (portfolio?.data ?? []) as PortfolioItem[];
+  const items = (portfolio?.data ?? []) as Portfolio[];
 
   return (
     <main className="min-h-screen p-8">
@@ -27,7 +22,7 @@ export default async function HomePage() {
       <section>
         <h2 className="text-2xl font-semibold mb-4">Portfolio</h2>
         <div className="grid gap-4 md:grid-cols-3">
-          {items.map((item: PortfolioItem) => (
+          {items.map((item: Portfolio) => (
             <div key={item.id} className="border rounded-lg p-4">
               <h3 className="font-semibold">{item.title}</h3>
               <p className="text-sm text-muted-foreground mt-1">
