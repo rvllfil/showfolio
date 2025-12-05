@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { SiteHeader } from "@/app/components/site-header";
+import { Navbar } from "@/app/components/navbar";
 import { getPortfolioItems } from "@/lib/api";
 import type { Portfolio } from "@/lib/types";
 
@@ -9,7 +9,7 @@ export default async function PortfolioPage() {
 
   return (
     <>
-      <SiteHeader />
+      <Navbar />
 
       <main className="mx-auto max-w-5xl px-4 py-12">
         <div className="mb-8">

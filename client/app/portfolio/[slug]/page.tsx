@@ -1,6 +1,6 @@
 import { notFound } from "next/navigation";
 import Link from "next/link";
-import { SiteHeader } from "@/app/components/site-header";
+import { Navbar } from "@/app/components/navbar";
 import { getPortfolioItemBySlug } from "@/lib/api";
 
 interface PortfolioDetailPageProps {
@@ -19,7 +19,7 @@ export default async function PortfolioDetailPage({
 
   return (
     <>
-      <SiteHeader />
+      <Navbar />
 
       <main className="max-w-4xl px-4 py-12 mx-auto">
         {/* Back link */}

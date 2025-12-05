@@ -50,13 +50,13 @@
     },
     "lightLogo": {
       "type": "media",
-      "multiple": true,
-      "allowedTypes": ["images", "files", "videos", "audios"]
+      "multiple": false,
+      "allowedTypes": ["images"]
     },
     "darkLogo": {
       "type": "media",
       "multiple": false,
-      "allowedTypes": ["images", "files", "videos", "audios"]
+      "allowedTypes": ["images"]
     }
   }
 }

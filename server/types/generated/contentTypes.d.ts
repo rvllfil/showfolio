@@ -494,11 +494,8 @@ export interface ApiProfileProfile extends Struct.SingleTypeSchema {
     createdAt: Schema.Attribute.DateTime;
     createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
-    darkLogo: Schema.Attribute.Media<'images' | 'files' | 'videos' | 'audios'>;
-    lightLogo: Schema.Attribute.Media<
-      'images' | 'files' | 'videos' | 'audios',
-      true
-    >;
+    darkLogo: Schema.Attribute.Media<'images'>;
+    lightLogo: Schema.Attribute.Media<'images'>;
     locale: Schema.Attribute.String & Schema.Attribute.Private;
     localizations: Schema.Attribute.Relation<
       'oneToMany',

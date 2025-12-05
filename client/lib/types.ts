@@ -24,7 +24,46 @@ export interface StrapiCollectionResponse<T> {
   };
 }
 
-// Strapi Block Content Types
+// Strapi Media Type
+export interface StrapiMedia {
+  id: number;
+  documentId: string;
+  name: string;
+  alternativeText?: string;
+  caption?: string;
+  width: number;
+  height: number;
+  formats?: {
+    thumbnail?: StrapiMediaFormat;
+    small?: StrapiMediaFormat;
+    medium?: StrapiMediaFormat;
+    large?: StrapiMediaFormat;
+  };
+  hash: string;
+  ext: string;
+  mime: string;
+  size: number;
+  url: string;
+  previewUrl?: string;
+  provider: string;
+  provider_metadata?: unknown;
+  createdAt: string;
+  updatedAt: string;
+  publishedAt: string;
+}
+
+export interface StrapiMediaFormat {
+  ext: string;
+  url: string;
+  hash: string;
+  mime: string;
+  name: string;
+  path?: string;
+  size: number;
+  width: number;
+  height: number;
+  sizeInBytes: number;
+}
 export interface StrapiBlock {
   type: string;
   children?: Array<{
@@ -69,6 +108,8 @@ export interface Profile {
   primaryCtaUrl?: string;
   secondaryCtaLabel?: string;
   secondaryCtaUrl?: string;
+  lightLogo?: StrapiMedia;
+  darkLogo?: StrapiMedia;
   socialLinks?: SocialLink[];
   portfolioNumber?: PortfolioNumber[];
   createdAt: string;

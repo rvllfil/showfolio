@@ -46,13 +46,16 @@ export async function fetchAPI(
 
 // Ambil Profile (single type)
 export async function getProfile(
-  locale: string = "id"
+  locale?: string
 ): Promise<StrapiResponse<Profile>> {
   const query = new URLSearchParams({
-    locale,
-    "populate[socialLinks]": "*",
-    "populate[portfolioNumber]": "*",
+    populate: "*",
   });
+
+  // Only add locale if provided
+  if (locale) {
+    query.set("locale", locale);
+  }
 
   return fetchAPI(`/api/profile?${query.toString()}`);
 }
@@ -61,7 +64,7 @@ export async function getProfile(
 export async function getPortfolioItems(): Promise<
   StrapiCollectionResponse<Portfolio>
 > {
-  return fetchAPI("/api/portfolios?populate[techTags]=*&sort=year:desc");
+  return fetchAPI("/api/portfolios?populate=*&sort=year:desc");
 }
 
 // Ambil featured portfolio items
@@ -70,7 +73,7 @@ export async function getFeaturedPortfolio(): Promise<
 > {
   const query = new URLSearchParams({
     "filters[isFeatured][$eq]": "true",
-    "populate[techTags]": "*",
+    populate: "*",
     sort: "year:desc",
   });
 
@@ -83,7 +86,7 @@ export async function getPortfolioItemBySlug(
 ): Promise<Portfolio | null> {
   const query = new URLSearchParams({
     "filters[slug][$eq]": slug,
-    "populate[techTags]": "*",
+    populate: "*",
   });
 
   const response = await fetchAPI(`/api/portfolios?${query.toString()}`);
