@@ -772,10 +772,3 @@ If you have questions or need help:
 - Read the troubleshooting section above
 
 ---
-
-**Built with ❤️ for developers and freelancers who want a modern, CMS-driven portfolio.**
-::contentReference[oaicite:0]{index=0}
-
-```
-
-```
