@@ -1,144 +1,291 @@
 "use client";
 
 import Image from "next/image";
-import { Profile } from "@/lib/types";
+import Link from "next/link";
+import { motion } from "framer-motion";
+import { ArrowRight, Code, Palette, Zap, Star } from "lucide-react";
+import { Profile, Skill } from "@/lib/types";
 
 interface HeroSectionProps {
   profileData?: Profile;
+  skillsData?: Skill[];
 }
 
-export function HeroSection({ profileData }: HeroSectionProps) {
-  // Suppress unused variable warning for now
-  console.log("Profile data available:", !!profileData);
-
+export function HeroSection({ profileData, skillsData }: HeroSectionProps) {
   return (
-    <section id="home" className="relative border-b bg-background border-muted">
-      <div className="container px-4 py-16 mx-auto sm:px-6 lg:px-8 lg:py-24">
-        <div className="grid items-center grid-cols-1 gap-12 lg:grid-cols-12 lg:gap-16">
-          {/* <!-- Text --> */}
-          <div className="space-y-8 lg:col-span-7">
-            <div className="space-y-4">
-              <h1
-                className="text-3xl font-semibold tracking-tight sm:text-4xl lg:text-5xl text-slate-900"
-                style={{ letterSpacing: "-0.04em" }}
-              >
-                {profileData?.tagline}
-              </h1>
-              <p className="max-w-xl text-sm sm:text-base text-slate-600">
-                {profileData?.shortInfo}
-              </p>
-            </div>
+    <section
+      id="home"
+      className="relative flex items-center min-h-screen pt-20 bg-linear-to-b from-background via-background to-muted/20"
+    >
+      {/* Background Elements */}
+      <div className="absolute inset-0 overflow-hidden pointer-events-none">
+        <div className="absolute rounded-full -top-40 -right-40 w-80 h-80 bg-primary/5 blur-3xl"></div>
+        <div className="absolute rounded-full -bottom-40 -left-40 w-80 h-80 bg-blue-500/5 blur-3xl"></div>
+      </div>
 
-            <div className="flex flex-wrap items-center gap-3">
-              <a
-                href="#projects"
-                className="inline-flex items-center justify-center rounded-full bg-slate-900 px-5 py-2.5 text-xs sm:text-sm font-medium text-white shadow-sm hover:bg-slate-800 hover:shadow-md hover:-translate-y-0.5 focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500 focus-visible:ring-offset-2 focus-visible:ring-offset-white transition-all"
+      <div className="container relative z-10 px-4 py-20 mx-auto sm:px-6 lg:px-8">
+        <div className="grid items-center grid-cols-1 gap-12 lg:grid-cols-12 lg:gap-16">
+          {/* Content */}
+          <div className="space-y-8 lg:col-span-7">
+            {/* Badge */}
+            {profileData?.heroAvailabilityText && (
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5 }}
+                className="inline-flex items-center px-4 py-2 space-x-2 text-sm font-medium border rounded-full border-border bg-muted/50 text-muted-foreground"
               >
-                View Projects
-                <i
-                  className="w-4 h-4 ml-2 lucide lucide-arrow-right"
-                  style={{ strokeWidth: 1.5 }}
-                ></i>
-              </a>
-              <a
-                href="#contact"
-                className="inline-flex items-center justify-center rounded-full border border-slate-200 bg-white px-5 py-2.5 text-xs sm:text-sm font-medium text-slate-900 hover:border-slate-900 hover:bg-slate-900 hover:text-white focus:outline-none focus-visible:ring-2 focus-visible:ring-slate-900 focus-visible:ring-offset-2 focus-visible:ring-offset-white transition-all"
-              >
-                Contact Me
-              </a>
-            </div>
+                <span className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></span>
+                <span>{profileData.heroAvailabilityText}</span>
+              </motion.div>
+            )}
+
+            {/* Main Heading */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: 0.1 }}
+              className="space-y-6"
+            >
+              <h1 className="text-4xl font-bold tracking-tight sm:text-5xl lg:text-6xl">
+                {profileData?.brandName ? (
+                  <>
+                    <span className="block">Hi, I&apos;m</span>
+                    <span className="block text-primary">
+                      {profileData.brandName}
+                    </span>
+                  </>
+                ) : (
+                  <>
+                    <span className="block">Building</span>
+                    <span className="block text-primary">exceptional</span>
+                    <span className="block">web experiences</span>
+                  </>
+                )}
+              </h1>
+
+              <p className="max-w-2xl text-lg text-muted-foreground sm:text-xl">
+                {profileData?.tagline ||
+                  "Full-stack developer specializing in modern web technologies. I create fast, scalable, and user-friendly applications that solve real business problems."}
+              </p>
+            </motion.div>
+
+            {/* Stats */}
+            {profileData?.portfolioNumber &&
+              profileData.portfolioNumber.length > 0 && (
+                <motion.div
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.5, delay: 0.2 }}
+                  className="grid grid-cols-3 gap-8 py-8 border-y border-border"
+                >
+                  {profileData.portfolioNumber.slice(0, 3).map((stat) => (
+                    <div key={stat.id}>
+                      <div className="text-2xl font-bold">{stat.value}</div>
+                      <div className="text-sm text-muted-foreground">
+                        {stat.label}
+                      </div>
+                    </div>
+                  ))}
+                </motion.div>
+              )}
+
+            {/* CTA Buttons */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: 0.3 }}
+              className="flex flex-col gap-4 sm:flex-row"
+            >
+              {profileData?.primaryCtaUrl && (
+                <Link
+                  href={profileData.primaryCtaUrl}
+                  className="inline-flex items-center justify-center px-8 py-4 text-sm font-medium transition-all rounded-full shadow-lg bg-primary text-primary-foreground hover:bg-primary/90 hover:scale-105 hover:shadow-xl"
+                >
+                  {profileData.primaryCtaLabel || "View My Work"}
+                  <ArrowRight className="w-4 h-4 ml-2" />
+                </Link>
+              )}
+              {profileData?.secondaryCtaUrl && (
+                <Link
+                  href={profileData.secondaryCtaUrl}
+                  className="inline-flex items-center justify-center px-8 py-4 text-sm font-medium transition-all border rounded-full shadow-md border-input bg-background hover:bg-accent hover:text-accent-foreground hover:scale-105"
+                >
+                  {profileData.secondaryCtaLabel || "Get in Touch"}
+                </Link>
+              )}
+            </motion.div>
+
+            {/* Skills Preview */}
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ duration: 0.5, delay: 0.4 }}
+              className="flex flex-wrap gap-2"
+            >
+              {skillsData && skillsData.length > 0 ? (
+                skillsData.slice(0, 6).map((skill) => {
+                  // Map category to icon
+                  const iconMap: Record<string, React.ReactNode> = {
+                    frontend: <Code className="w-3 h-3" />,
+                    backend: <Code className="w-3 h-3" />,
+                    uiux: <Palette className="w-3 h-3" />,
+                    mobile: <Code className="w-3 h-3" />,
+                    devops: <Zap className="w-3 h-3" />,
+                    tools: <Zap className="w-3 h-3" />,
+                  };
+
+                  return (
+                    <span
+                      key={skill.documentId}
+                      className="inline-flex items-center gap-2 px-3 py-1 text-xs font-medium border rounded-full border-border bg-background"
+                    >
+                      {iconMap[skill.category] || <Code className="w-3 h-3" />}
+                      {skill.name}
+                    </span>
+                  );
+                })
+              ) : (
+                // Fallback skills
+                <>
+                  <span className="inline-flex items-center gap-2 px-3 py-1 text-xs font-medium border rounded-full border-border bg-background">
+                    <Code className="w-3 h-3" />
+                    React & Next.js
+                  </span>
+                  <span className="inline-flex items-center gap-2 px-3 py-1 text-xs font-medium border rounded-full border-border bg-background">
+                    <Zap className="w-3 h-3" />
+                    TypeScript
+                  </span>
+                  <span className="inline-flex items-center gap-2 px-3 py-1 text-xs font-medium border rounded-full border-border bg-background">
+                    <Palette className="w-3 h-3" />
+                    UI/UX Design
+                  </span>
+                </>
+              )}
+            </motion.div>
           </div>
 
-          {/* Portrait / Illustration */}
-          <div className="lg:col-span-5">
+          {/* Visual Element */}
+          <motion.div
+            initial={{ opacity: 0, scale: 0.95 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 0.5, delay: 0.2 }}
+            className="lg:col-span-5"
+          >
             <div className="relative">
-              {/* Subtle background card (parallax concept) */}
-              <div className="absolute w-24 h-24 border border-dashed -top-6 -left-6 rounded-2xl border-slate-200 bg-slate-50/60"></div>
-              <div className="absolute border -bottom-8 -right-4 h-28 w-28 rounded-2xl border-slate-200 bg-linear-to-tr from-slate-50 via-white to-indigo-50"></div>
+              {/* Background decorations */}
+              <div className="absolute rounded-full -top-4 -left-4 w-72 h-72 bg-primary/10 blur-2xl animate-pulse"></div>
 
-              <div className="relative overflow-hidden bg-white border shadow-sm rounded-2xl border-slate-200">
-                <div className="flex flex-col">
-                  <div className="flex items-center justify-between px-4 pt-3 pb-2 border-b border-slate-100">
-                    <div className="flex items-center space-x-1.5">
-                      <span className="h-2.5 w-2.5 rounded-full bg-slate-300"></span>
-                      <span className="h-2.5 w-2.5 rounded-full bg-slate-300"></span>
-                      <span className="h-2.5 w-2.5 rounded-full bg-slate-300"></span>
-                    </div>
-                    <span className="text-[10px] font-medium text-slate-500">
-                      portfolio.tsx
-                    </span>
+              {/* Main card */}
+              <div className="relative p-6 border shadow-2xl rounded-2xl border-border bg-card">
+                {/* Browser chrome */}
+                <div className="flex items-center gap-2 pb-4 border-b border-border">
+                  <div className="flex gap-2">
+                    <div className="w-3 h-3 bg-red-500 rounded-full"></div>
+                    <div className="w-3 h-3 bg-yellow-500 rounded-full"></div>
+                    <div className="w-3 h-3 bg-green-500 rounded-full"></div>
                   </div>
-                  <div className="p-4 sm:p-5">
-                    {/* Portrait */}
-                    <div className="flex items-center space-x-4">
-                      <div className="relative">
-                        <Image
-                          src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=400&q=80"
-                          alt="Developer portrait"
-                          width={64}
-                          height={64}
-                          className="object-cover w-16 h-16 border rounded-xl border-slate-200"
-                        />
-                        <span className="absolute -bottom-1 -right-1 inline-flex items-center rounded-full bg-emerald-50 px-2 py-0.5 text-[10px] font-medium text-emerald-700 border border-emerald-100">
-                          <span className="h-1.5 w-1.5 rounded-full bg-emerald-500 mr-1"></span>
-                          Online
-                        </span>
-                      </div>
-                      <div className="space-y-1">
-                        <p className="text-sm font-medium text-slate-900">
-                          John Doe
-                        </p>
-                        <p className="text-xs text-slate-500">
-                          Crafting interfaces &amp; design systems for the web.
-                        </p>
-                      </div>
+                  <div className="flex-1 text-center">
+                    <div className="inline-block px-3 py-1 text-xs rounded-full bg-muted">
+                      portfolio.dev
                     </div>
+                  </div>
+                </div>
 
-                    {/* <!-- Code-like info --> */}
-                    <div className="px-3 py-3 mt-4 border rounded-lg bg-slate-50 border-slate-100">
-                      <pre
-                        className="text-[11px] leading-relaxed text-slate-700"
-                        style={{
-                          fontFamily:
-                            "'SF Mono', ui-monospace, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace",
-                        }}
-                      >
-                        <span className="text-slate-400">
-                          {"// Current stack"}
-                        </span>
-                        {"\n"}
-                        <span className="text-slate-500">{"const"}</span>
-                        {" developer "}
-                        <span className="text-slate-500">{"="}</span>
-                        {" {\n"}
-                        {"  role:        "}
-                        <span className="text-emerald-600">
-                          {"'Frontend Engineer'"}
-                        </span>
-                        {",\n"}
-                        {"  location:    "}
-                        <span className="text-indigo-600">
-                          {"'Remote / EU'"}
-                        </span>
-                        {",\n"}
-                        {"  focus:       "}
-                        <span className="text-emerald-600">
-                          {"'Interfaces & Design Systems'"}
-                        </span>
-                        {"\n"}
-                        {"}"}
-                      </pre>
+                {/* Profile section */}
+                <div className="pt-6">
+                  <div className="flex items-center gap-4 mb-6">
+                    <div className="relative">
+                      <Image
+                        src={
+                          profileData?.profileImage
+                            ? `${process.env.NEXT_PUBLIC_API_URL}${profileData.profileImage.url}`
+                            : "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=150&q=80"
+                        }
+                        alt={profileData?.brandName || "Profile"}
+                        width={60}
+                        height={60}
+                        className="border-2 rounded-full border-border object-cover"
+                        unoptimized
+                      />
+                      <div className="absolute w-4 h-4 bg-green-500 border-2 rounded-full -bottom-1 -right-1 border-card"></div>
+                    </div>
+                    <div>
+                      <h3 className="font-semibold">
+                        {profileData?.brandName || "Developer"}
+                      </h3>
+                      <p className="text-sm text-muted-foreground">
+                        {profileData?.title || "Full-Stack Developer"}
+                      </p>
+                    </div>
+                  </div>
+
+                  {/* Code snippet */}
+                  <div className="p-4 space-y-2 font-mono text-xs rounded-lg bg-muted/50">
+                    <div className="text-muted-foreground">
+                      {"// Currently building"}
+                    </div>
+                    <div>
+                      <span className="text-blue-600 dark:text-blue-400">
+                        const
+                      </span>{" "}
+                      <span className="text-purple-600 dark:text-purple-400">
+                        project
+                      </span>{" "}
+                      <span className="text-muted-foreground">=</span>{" "}
+                      <span className="text-green-600 dark:text-green-400">
+                        &quot;amazing-web-app&quot;
+                      </span>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <Star className="w-3 h-3 text-yellow-500 fill-yellow-500" />
+                      <span className="text-muted-foreground text-[10px]">
+                        Building with passion
+                      </span>
+                    </div>
+                  </div>
+
+                  {/* Activity indicators */}
+                  <div className="flex items-center justify-between pt-4 mt-6 border-t border-border">
+                    <div className="flex items-center gap-2">
+                      <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
+                      <span className="text-xs text-muted-foreground">
+                        Active now
+                      </span>
+                    </div>
+                    <div className="text-xs text-muted-foreground">
+                      Response: ~2 hours
                     </div>
                   </div>
                 </div>
               </div>
+
+              {/* Floating elements */}
+              <motion.div
+                animate={{ y: [0, -10, 0] }}
+                transition={{
+                  duration: 3,
+                  repeat: Infinity,
+                  ease: "easeInOut",
+                }}
+                className="absolute flex items-center justify-center w-16 h-16 rounded-full -top-8 -right-8 bg-primary/20"
+              >
+                <Code className="w-8 h-8 text-primary" />
+              </motion.div>
+              <motion.div
+                animate={{ y: [0, 10, 0] }}
+                transition={{
+                  duration: 2,
+                  repeat: Infinity,
+                  ease: "easeInOut",
+                  delay: 0.5,
+                }}
+                className="absolute flex items-center justify-center w-12 h-12 rounded-full -bottom-4 -left-8 bg-blue-500/20"
+              >
+                <Zap className="w-6 h-6 text-blue-500" />
+              </motion.div>
             </div>
-            {/* Animation note (concept) */}
-            <p className="mt-4 text-[11px] text-slate-400">
-              Concept: card softly fades up with a slight parallax offset as it
-              scrolls into view.
-            </p>
-          </div>
+          </motion.div>
         </div>
       </div>
     </section>
