@@ -22,7 +22,12 @@ export async function generateMetadata({
   params,
 }: PortfolioDetailPageProps): Promise<Metadata> {
   const { slug } = await params;
-  const item = await getPortfolioItemBySlug(slug);
+  let item = null;
+  try {
+    item = await getPortfolioItemBySlug(slug);
+  } catch (error) {
+    console.warn("Failed to fetch portfolio item for metadata", error);
+  }
 
   if (!item) {
     return {
@@ -48,10 +53,15 @@ export default async function PortfolioDetailPage({
   params,
 }: PortfolioDetailPageProps) {
   const { slug } = await params;
-  const [item, profileResponse] = await Promise.all([
-    getPortfolioItemBySlug(slug),
-    getProfile(),
-  ]);
+  let item, profileResponse;
+  try {
+    [item, profileResponse] = await Promise.all([
+      getPortfolioItemBySlug(slug),
+      getProfile(),
+    ]);
+  } catch (error) {
+    console.warn("Failed to fetch portfolio item data", error);
+  }
 
   if (!item) {
     notFound();

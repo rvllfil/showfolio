@@ -17,16 +17,25 @@ import { Footer } from "@/app/components/footer";
 
 export default async function HomePage() {
   // Fetch all data in parallel for better performance
-  const [profile, featuredPortfolio, skills, testimonials, services] =
-    await Promise.all([
-      getProfile(),
-      getFeaturedPortfolio(),
-      getSkills(),
-      getTestimonials(),
-      getServices(),
-    ]);
+  let profile, featuredPortfolio, skills, testimonials, services;
 
-  const profileData = profile?.data;
+  try {
+    [profile, featuredPortfolio, skills, testimonials, services] =
+      await Promise.all([
+        getProfile(),
+        getFeaturedPortfolio(),
+        getSkills(),
+        getTestimonials(),
+        getServices(),
+      ]);
+  } catch (error) {
+    console.warn(
+      "Could not fetch data during build/runtime, using defaults.",
+      error
+    );
+  }
+
+  const profileData = profile?.data ?? null;
   const featuredItems = featuredPortfolio?.data ?? [];
   const skillsData = skills?.data ?? [];
   const testimonialsData = testimonials?.data ?? [];
@@ -36,33 +45,39 @@ export default async function HomePage() {
     <>
       <Navbar profileData={profileData} />
       <main className="min-h-screen bg-background">
-        <HeroSection profileData={profileData} skillsData={skillsData} />
+        <HeroSection
+          profileData={profileData ?? undefined}
+          skillsData={skillsData}
+      />
         <AboutSection
-          profileData={profileData}
+          profileData={profileData ?? undefined}
           featuredItemsCount={featuredItems.length}
         />
         {/* Only render Services section if services exist */}
         {servicesData.length > 0 && (
           <ServicesSection
-            profileData={profileData}
+            profileData={profileData ?? undefined}
             servicesData={servicesData}
           />
         )}
         <ProjectsSection
-          profileData={profileData}
+          profileData={profileData ?? undefined}
           featuredItems={featuredItems}
         />
-        <SkillsSection profileData={profileData} skillsData={skillsData} />
+        <SkillsSection
+          profileData={profileData ?? undefined}
+          skillsData={skillsData}
+        />
         {/* Only render Testimonials section if testimonials exist */}
         {testimonialsData.length > 0 && (
           <TestimonialsSection
-            profileData={profileData}
+            profileData={profileData ?? undefined}
             testimonialsData={testimonialsData}
           />
         )}
-        <ContactSection profileData={profileData} />
+        <ContactSection profileData={profileData ?? undefined} />
       </main>
-      <Footer profileData={profileData} />
+      <Footer profileData={profileData ?? undefined} />
     </>
   );
 }

@@ -19,7 +19,7 @@ import {
 } from "lucide-react";
 
 interface ContactSectionProps {
-  profileData: any;
+  profileData?: any;
 }
 
 export function ContactSection({ profileData }: ContactSectionProps) {

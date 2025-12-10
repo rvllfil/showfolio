@@ -4,8 +4,16 @@ import { getProfile } from "@/lib/api";
 import "./globals.css";
 
 export async function generateMetadata(): Promise<Metadata> {
-  const profile = await getProfile();
-  const profileData = profile?.data;
+  let profileData = null;
+  try {
+    const profile = await getProfile();
+    profileData = profile?.data;
+  } catch (error) {
+    console.warn(
+      "Could not fetch profile data during build/runtime, using defaults.",
+      error
+    );
+  }
 
   // Favicon URL from Strapi or fallback to default
   const faviconUrl = profileData?.favicon
@@ -32,8 +40,8 @@ export async function generateMetadata(): Promise<Metadata> {
       "Next.js",
       "TypeScript",
     ],
-    authors: [{ name: profileData?.brandName || "rvllfil" }],
-    creator: profileData?.brandName || "rvllfil",
+    authors: [{ name: profileData?.brandName || "showfolio" }],
+    creator: profileData?.brandName || "showfolio",
     icons: {
       icon: faviconUrl,
       shortcut: faviconUrl,
@@ -82,7 +90,7 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <body
-        className="min-h-screen bg-background text-foreground antialiased"
+        className="min-h-screen antialiased bg-background text-foreground"
         suppressHydrationWarning
       >
         <ThemeProvider
@@ -91,7 +99,7 @@ export default function RootLayout({
           enableSystem={true}
           disableTransitionOnChange
         >
-          <div className="flex min-h-screen flex-col">{children}</div>
+          <div className="flex flex-col min-h-screen">{children}</div>
         </ThemeProvider>
       </body>
     </html>

@@ -16,10 +16,19 @@ export const metadata: Metadata = {
 };
 
 export default async function PortfolioPage() {
-  const [portfolioResponse, profileResponse] = await Promise.all([
-    getPortfolioItems(),
-    getProfile(),
-  ]);
+  let portfolioResponse, profileResponse;
+  try {
+    [portfolioResponse, profileResponse] = await Promise.all([
+      getPortfolioItems(),
+      getProfile(),
+    ]);
+  } catch (error) {
+    console.warn(
+      "Could not fetch portfolio data during build/runtime, using defaults.",
+      error
+    );
+  }
+
   const portfolioItems = (portfolioResponse?.data ?? []) as Portfolio[];
   const profileData = profileResponse?.data ?? null;
 
