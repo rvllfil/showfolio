@@ -1,0 +1,30 @@
+FROM node:20-alpine
+
+WORKDIR /app
+
+# Install dependencies for native modules
+RUN apk add --no-cache \
+    python3 \
+    make \
+    g++ \
+    git
+
+# Copy package files
+COPY package*.json ./
+
+# Install all dependencies (including dev)
+RUN npm install
+
+# Copy application code
+COPY . .
+
+# Expose port
+EXPOSE 1337
+
+# Set environment
+ENV NODE_ENV=development
+ENV HOST=0.0.0.0
+ENV PORT=1337
+
+# Start in development mode with hot reload
+CMD ["npm", "run", "develop"]
