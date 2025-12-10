@@ -1,6 +1,9 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
+  // Skip static generation during Docker build (Strapi not running yet)
+  output: process.env.DOCKER_BUILD === "true" ? "standalone" : undefined,
+
   images: {
     remotePatterns: [
       {
