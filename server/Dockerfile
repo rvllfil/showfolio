@@ -29,12 +29,17 @@ RUN npm ci --omit=dev
 # Copy built application from build stage
 COPY --from=build /app/dist ./dist
 COPY --from=build /app/public ./public
-COPY --from=build /app/config ./config
+# Copy compiled config and src from dist, not source
+COPY --from=build /app/dist/config ./config
 COPY --from=build /app/database ./database
-COPY --from=build /app/src ./src
+COPY --from=build /app/dist/src ./src
 
 # Create uploads directory
 RUN mkdir -p /app/public/uploads
+
+# Link admin build to where Strapi expects it in production
+RUN mkdir -p /app/node_modules/@strapi/admin/dist/server/server && \
+    ln -sf /app/dist/build /app/node_modules/@strapi/admin/dist/server/server/build
 
 # Set environment variables
 ENV NODE_ENV=production
