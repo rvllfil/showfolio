@@ -1,0 +1,87 @@
+version: '3.8'
+
+services:
+  # PostgreSQL Database
+  db:
+    image: postgres:15-alpine
+    container_name: showfolio-db-dev
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: showfolio
+      POSTGRES_USER: showfolio
+      POSTGRES_PASSWORD: showfolio
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data_dev:/var/lib/postgresql/data
+    networks:
+      - showfolio-network
+
+  # Strapi Backend (Development mode)
+  server:
+    build:
+      context: ./server
+      dockerfile: Dockerfile.dev
+    container_name: showfolio-strapi-dev
+    restart: unless-stopped
+    ports:
+      - "1337:1337"
+    environment:
+      NODE_ENV: development
+      HOST: 0.0.0.0
+      PORT: 1337
+      # Database Configuration
+      DATABASE_CLIENT: postgres
+      DATABASE_HOST: db
+      DATABASE_PORT: 5432
+      DATABASE_NAME: showfolio
+      DATABASE_USERNAME: showfolio
+      DATABASE_PASSWORD: showfolio
+      DATABASE_SSL: false
+      # Strapi Secrets
+      APP_KEYS: ${APP_KEYS:-toBeModified1,toBeModified2}
+      API_TOKEN_SALT: ${API_TOKEN_SALT:-tobemodified}
+      ADMIN_JWT_SECRET: ${ADMIN_JWT_SECRET:-tobemodified}
+      TRANSFER_TOKEN_SALT: ${TRANSFER_TOKEN_SALT:-tobemodified}
+      JWT_SECRET: ${JWT_SECRET:-tobemodified}
+    volumes:
+      - ./server:/app
+      - /app/node_modules
+      - ./server/public/uploads:/app/public/uploads
+    networks:
+      - showfolio-network
+    depends_on:
+      - db
+    command: npm run develop
+
+  # Next.js Frontend (Development mode)
+  client:
+    build:
+      context: ./client
+      dockerfile: Dockerfile.dev
+    container_name: showfolio-client-dev
+    restart: unless-stopped
+    ports:
+      - "3000:3000"
+    environment:
+      NODE_ENV: development
+      NEXT_PUBLIC_API_URL: ${NEXT_PUBLIC_API_URL:-http://localhost:1337}
+      # Watch for changes
+      WATCHPACK_POLLING: true
+    volumes:
+      - ./client:/app
+      - /app/node_modules
+      - /app/.next
+    networks:
+      - showfolio-network
+    depends_on:
+      - server
+    command: npm run dev
+
+volumes:
+  postgres_data_dev:
+    driver: local
+
+networks:
+  showfolio-network:
+    driver: bridge
