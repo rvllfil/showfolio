@@ -24,7 +24,7 @@ interface ContactSectionProps {
 
 export function ContactSection({ profileData }: ContactSectionProps) {
   const handleContactClick = () => {
-    console.log("Contact clicked");
+    // Handle contact button click
   };
 
   // Icon mapping for social platforms

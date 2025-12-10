@@ -140,7 +140,7 @@ export function TestimonialsSection({
                       src={
                         typeof testimonial.avatar === "string"
                           ? testimonial.avatar
-                          : `http://localhost:1337${testimonial.avatar.url}`
+                          : `${process.env.NEXT_PUBLIC_API_URL}${testimonial.avatar.url}`
                       }
                       alt={testimonial.name}
                       fill

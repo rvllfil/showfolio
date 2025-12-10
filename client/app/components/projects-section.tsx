@@ -78,7 +78,7 @@ export function ProjectsSection({
                   <div className="aspect-video bg-muted relative overflow-hidden">
                     {project.thumbnail?.url ? (
                       <Image
-                        src={`http://localhost:1337${project.thumbnail.url}`}
+                        src={`${process.env.NEXT_PUBLIC_API_URL}${project.thumbnail.url}`}
                         alt={project.title}
                         fill
                         className="object-cover group-hover:scale-110 transition-transform duration-700"

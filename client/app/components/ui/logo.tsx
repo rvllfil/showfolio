@@ -154,7 +154,7 @@ export function Logo({
         size={size}
         className={className}
         onError={() => {
-          console.log("Logo failed to load");
+          // Image failed to load, component will use fallback
         }}
       />
     );

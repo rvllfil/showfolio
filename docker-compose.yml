@@ -68,7 +68,7 @@ services:
       context: ./client
       dockerfile: Dockerfile
       args:
-        NEXT_PUBLIC_API_URL: http://localhost:1337
+        NEXT_PUBLIC_API_URL: ${NEXT_PUBLIC_API_URL:-http://localhost:1337}
     container_name: showfolio-client
     restart: unless-stopped
     ports:
