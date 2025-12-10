@@ -491,10 +491,47 @@ export interface ApiProfileProfile extends Struct.SingleTypeSchema {
   attributes: {
     about: Schema.Attribute.Blocks;
     brandName: Schema.Attribute.String;
+    contactBenefitsDescription1: Schema.Attribute.String &
+      Schema.Attribute.DefaultTo<'Usually within 24 hours'>;
+    contactBenefitsDescription2: Schema.Attribute.String &
+      Schema.Attribute.DefaultTo<'No commitment required'>;
+    contactBenefitsDescription3: Schema.Attribute.String &
+      Schema.Attribute.DefaultTo<'Efficient project delivery'>;
+    contactBenefitsTitle1: Schema.Attribute.String &
+      Schema.Attribute.DefaultTo<'Quick Response'>;
+    contactBenefitsTitle2: Schema.Attribute.String &
+      Schema.Attribute.DefaultTo<'Free Consultation'>;
+    contactBenefitsTitle3: Schema.Attribute.String &
+      Schema.Attribute.DefaultTo<'Fast Turnaround'>;
+    contactCtaDescription: Schema.Attribute.Text &
+      Schema.Attribute.DefaultTo<"Let's discuss your ideas and see how we can collaborate to create something amazing together.">;
+    contactCtaTitle: Schema.Attribute.String &
+      Schema.Attribute.DefaultTo<'Ready to Start Your Project?'>;
+    contactPrimaryButtonLabel: Schema.Attribute.String &
+      Schema.Attribute.DefaultTo<'Send Message'>;
+    contactSecondaryButtonLabel: Schema.Attribute.String &
+      Schema.Attribute.DefaultTo<'Schedule Call'>;
+    contactSectionDescription: Schema.Attribute.Text &
+      Schema.Attribute.DefaultTo<"Have a project in mind? I'd love to hear about it and help bring your ideas to life.">;
+    contactSectionTitle: Schema.Attribute.String &
+      Schema.Attribute.DefaultTo<"Let's Work Together">;
+    contactSocialDescription: Schema.Attribute.String &
+      Schema.Attribute.DefaultTo<'Follow me on social media or drop me a message'>;
+    contactSocialTitle: Schema.Attribute.String &
+      Schema.Attribute.DefaultTo<'Connect With Me'>;
     createdAt: Schema.Attribute.DateTime;
     createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
     darkLogo: Schema.Attribute.Media<'images'>;
+    favicon: Schema.Attribute.Media<'images'>;
+    footerContactTitle: Schema.Attribute.String &
+      Schema.Attribute.DefaultTo<'Get in Touch'>;
+    footerEmailLabel: Schema.Attribute.String &
+      Schema.Attribute.DefaultTo<'Email Me'>;
+    footerPortfolioLabel: Schema.Attribute.String &
+      Schema.Attribute.DefaultTo<'View Portfolio'>;
+    footerQuickLinksTitle: Schema.Attribute.String &
+      Schema.Attribute.DefaultTo<'Quick Links'>;
     lightLogo: Schema.Attribute.Media<'images'>;
     locale: Schema.Attribute.String & Schema.Attribute.Private;
     localizations: Schema.Attribute.Relation<
@@ -502,19 +539,83 @@ export interface ApiProfileProfile extends Struct.SingleTypeSchema {
       'api::profile.profile'
     > &
       Schema.Attribute.Private;
+    navAboutLabel: Schema.Attribute.String &
+      Schema.Attribute.DefaultTo<'About'>;
+    navContactLabel: Schema.Attribute.String &
+      Schema.Attribute.DefaultTo<'Contact'>;
+    navCtaLabel: Schema.Attribute.String &
+      Schema.Attribute.DefaultTo<"Let's Work Together">;
+    navHomeLabel: Schema.Attribute.String & Schema.Attribute.DefaultTo<'Home'>;
+    navPortfolioLabel: Schema.Attribute.String &
+      Schema.Attribute.DefaultTo<'Portfolio'>;
+    navServicesLabel: Schema.Attribute.String &
+      Schema.Attribute.DefaultTo<'Services'>;
     portfolioNumber: Schema.Attribute.Component<
       'global.portfolio-number',
       true
     >;
     primaryCtaLabel: Schema.Attribute.String;
     primaryCtaUrl: Schema.Attribute.String;
+    profileImage: Schema.Attribute.Media<'images'>;
     publishedAt: Schema.Attribute.DateTime;
     secondaryCtaLabel: Schema.Attribute.String;
     secondaryCtaUrl: Schema.Attribute.String;
-    services: Schema.Attribute.Blocks;
     shortInfo: Schema.Attribute.Text;
     socialLinks: Schema.Attribute.Component<'global.social-links', true>;
     tagline: Schema.Attribute.String;
+    title: Schema.Attribute.String;
+    updatedAt: Schema.Attribute.DateTime;
+    updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    whatIDoList: Schema.Attribute.RichText;
+  };
+}
+
+export interface ApiServiceService extends Struct.CollectionTypeSchema {
+  collectionName: 'services';
+  info: {
+    description: 'Services offered to clients';
+    displayName: 'Service';
+    pluralName: 'services';
+    singularName: 'service';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  attributes: {
+    createdAt: Schema.Attribute.DateTime;
+    createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    description: Schema.Attribute.Blocks & Schema.Attribute.Required;
+    featured: Schema.Attribute.Boolean & Schema.Attribute.DefaultTo<false>;
+    icon: Schema.Attribute.Enumeration<
+      [
+        'code',
+        'palette',
+        'server',
+        'database',
+        'smartphone',
+        'cloud',
+        'globe',
+        'shield',
+        'layers',
+        'sparkles',
+      ]
+    > &
+      Schema.Attribute.Required &
+      Schema.Attribute.DefaultTo<'code'>;
+    image: Schema.Attribute.Media<'images'>;
+    locale: Schema.Attribute.String & Schema.Attribute.Private;
+    localizations: Schema.Attribute.Relation<
+      'oneToMany',
+      'api::service.service'
+    > &
+      Schema.Attribute.Private;
+    order: Schema.Attribute.Integer;
+    publishedAt: Schema.Attribute.DateTime;
+    short_description: Schema.Attribute.Text & Schema.Attribute.Required;
+    slug: Schema.Attribute.UID<'title'> & Schema.Attribute.Required;
+    title: Schema.Attribute.String & Schema.Attribute.Required;
     updatedAt: Schema.Attribute.DateTime;
     updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
@@ -524,6 +625,7 @@ export interface ApiProfileProfile extends Struct.SingleTypeSchema {
 export interface ApiSkillSkill extends Struct.CollectionTypeSchema {
   collectionName: 'skills';
   info: {
+    description: 'Technical skills and technologies';
     displayName: 'Skill';
     pluralName: 'skills';
     singularName: 'skill';
@@ -533,18 +635,63 @@ export interface ApiSkillSkill extends Struct.CollectionTypeSchema {
   };
   attributes: {
     category: Schema.Attribute.Enumeration<
-      ['backend', 'frontend', 'cms', 'ecommerce', 'tool']
-    >;
+      ['frontend', 'backend', 'uiux', 'mobile', 'devops', 'tools']
+    > &
+      Schema.Attribute.Required;
     createdAt: Schema.Attribute.DateTime;
     createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
-    description: Schema.Attribute.Text;
+    description: Schema.Attribute.RichText;
+    icon: Schema.Attribute.String;
+    level: Schema.Attribute.Integer &
+      Schema.Attribute.SetMinMax<
+        {
+          max: 100;
+          min: 0;
+        },
+        number
+      >;
     locale: Schema.Attribute.String & Schema.Attribute.Private;
     localizations: Schema.Attribute.Relation<'oneToMany', 'api::skill.skill'> &
       Schema.Attribute.Private;
-    name: Schema.Attribute.String;
+    name: Schema.Attribute.String & Schema.Attribute.Required;
+    publishedAt: Schema.Attribute.DateTime;
+    slug: Schema.Attribute.UID<'name'> & Schema.Attribute.Required;
+    updatedAt: Schema.Attribute.DateTime;
+    updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+  };
+}
+
+export interface ApiTestimonialTestimonial extends Struct.CollectionTypeSchema {
+  collectionName: 'testimonials';
+  info: {
+    description: 'Client testimonials and reviews';
+    displayName: 'Testimonial';
+    pluralName: 'testimonials';
+    singularName: 'testimonial';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  attributes: {
+    avatar: Schema.Attribute.Media<'images'>;
+    company: Schema.Attribute.String;
+    createdAt: Schema.Attribute.DateTime;
+    createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    featured: Schema.Attribute.Boolean & Schema.Attribute.DefaultTo<false>;
+    locale: Schema.Attribute.String & Schema.Attribute.Private;
+    localizations: Schema.Attribute.Relation<
+      'oneToMany',
+      'api::testimonial.testimonial'
+    > &
+      Schema.Attribute.Private;
+    name: Schema.Attribute.String & Schema.Attribute.Required;
     order: Schema.Attribute.Integer;
     publishedAt: Schema.Attribute.DateTime;
+    quote: Schema.Attribute.Blocks & Schema.Attribute.Required;
+    role: Schema.Attribute.String & Schema.Attribute.Required;
     updatedAt: Schema.Attribute.DateTime;
     updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
@@ -1063,7 +1210,9 @@ declare module '@strapi/strapi' {
       'admin::user': AdminUser;
       'api::portfolio.portfolio': ApiPortfolioPortfolio;
       'api::profile.profile': ApiProfileProfile;
+      'api::service.service': ApiServiceService;
       'api::skill.skill': ApiSkillSkill;
+      'api::testimonial.testimonial': ApiTestimonialTestimonial;
       'plugin::content-releases.release': PluginContentReleasesRelease;
       'plugin::content-releases.release-action': PluginContentReleasesReleaseAction;
       'plugin::i18n.locale': PluginI18NLocale;
