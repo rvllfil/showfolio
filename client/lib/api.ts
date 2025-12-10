@@ -4,6 +4,8 @@ import type {
   Profile,
   Portfolio,
   Skill,
+  Testimonial,
+  Service,
 } from "./types";
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL;
@@ -71,33 +73,62 @@ export async function getPortfolioItems(): Promise<
 export async function getFeaturedPortfolio(): Promise<
   StrapiCollectionResponse<Portfolio>
 > {
-  const query = new URLSearchParams({
-    "filters[isFeatured][$eq]": "true",
-    populate: "*",
-    sort: "year:desc",
-  });
-
-  return fetchAPI(`/api/portfolios?${query.toString()}`);
+  return fetchAPI(
+    "/api/portfolios?filters[isFeatured][$eq]=true&populate=*&sort=year:desc"
+  );
 }
 
 // Ambil portfolio item berdasarkan slug
 export async function getPortfolioItemBySlug(
   slug: string
 ): Promise<Portfolio | null> {
-  const query = new URLSearchParams({
-    "filters[slug][$eq]": slug,
-    populate: "*",
-  });
-
-  const response = await fetchAPI(`/api/portfolios?${query.toString()}`);
+  const response = await fetchAPI(
+    `/api/portfolios?filters[slug][$eq]=${slug}&populate=*`
+  );
   return response.data?.[0] || null;
 }
 
 // Ambil semua Skills
 export async function getSkills(): Promise<StrapiCollectionResponse<Skill>> {
   const query = new URLSearchParams({
-    sort: "order:asc",
+    sort: "name:asc",
   });
 
   return fetchAPI(`/api/skills?${query.toString()}`);
+}
+
+// Ambil semua Testimonials (if collection exists in Strapi)
+export async function getTestimonials(): Promise<
+  StrapiCollectionResponse<Testimonial>
+> {
+  try {
+    const query = new URLSearchParams({
+      sort: "order:asc",
+      populate: "*",
+    });
+
+    return await fetchAPI(`/api/testimonials?${query.toString()}`);
+  } catch (error) {
+    // Return empty array if testimonials collection doesn't exist yet
+    console.warn("Testimonials collection not found, using fallback data");
+    return { data: [], meta: {} };
+  }
+}
+
+// Ambil semua Services (if collection exists in Strapi)
+export async function getServices(): Promise<
+  StrapiCollectionResponse<Service>
+> {
+  try {
+    const query = new URLSearchParams({
+      sort: "order:asc",
+      populate: "*",
+    });
+
+    return await fetchAPI(`/api/services?${query.toString()}`);
+  } catch (error) {
+    // Return empty array if services collection doesn't exist yet
+    console.warn("Services collection not found, using Profile.services field");
+    return { data: [], meta: {} };
+  }
 }
