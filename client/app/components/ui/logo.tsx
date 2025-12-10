@@ -105,7 +105,7 @@ export function Logo({
         } else {
           // Default fallback
           setProfile({
-            brandName: "rvllfil",
+            brandName: "showfolio",
           } as Profile);
         }
       } finally {
@@ -163,7 +163,7 @@ export function Logo({
   // Fallback to brand name if showBrandNameFallback is true
   if (showBrandNameFallback) {
     const brandName =
-      profile?.brandName || fallbackProfile?.brandName || "rvllfil";
+      profile?.brandName || fallbackProfile?.brandName || "showfolio";
 
     if (size === "sm") {
       return (

@@ -100,11 +100,6 @@ export function Navbar({ profileData }: NavbarProps) {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  // Close mobile menu on route change
-  useEffect(() => {
-    setIsOpen(false);
-  }, [pathname]);
-
   // Handle smooth scroll for anchor links
   const handleAnchorClick = (
     e: React.MouseEvent<HTMLAnchorElement>,
@@ -131,15 +126,15 @@ export function Navbar({ profileData }: NavbarProps) {
           : "bg-transparent"
       }`}
     >
-      <nav className="container mx-auto px-4 sm:px-6 lg:px-8">
+      <nav className="container px-4 mx-auto sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16 lg:h-20">
           {/* Logo */}
-          <Link href="/" className="shrink-0 z-50">
+          <Link href="/" className="z-50 shrink-0">
             <Logo size="sm" />
           </Link>
 
           {/* Desktop Navigation */}
-          <div className="hidden md:flex items-center space-x-8">
+          <div className="items-center hidden space-x-8 md:flex">
             {navItems.map((item) => (
               <Link
                 key={item.href}
@@ -157,12 +152,12 @@ export function Navbar({ profileData }: NavbarProps) {
           </div>
 
           {/* Desktop Actions */}
-          <div className="hidden md:flex items-center space-x-4">
+          <div className="items-center hidden space-x-4 md:flex">
             <ThemeToggle />
             <Link
               href="#contact"
               onClick={(e) => handleAnchorClick(e, "#contact")}
-              className="inline-flex items-center justify-center rounded-full bg-primary px-6 py-2 text-sm font-medium text-primary-foreground hover:bg-primary/90 transition-colors"
+              className="inline-flex items-center justify-center px-6 py-2 text-sm font-medium transition-colors rounded-full bg-primary text-primary-foreground hover:bg-primary/90"
             >
               {ctaLabel}
             </Link>
@@ -173,14 +168,14 @@ export function Navbar({ profileData }: NavbarProps) {
             <ThemeToggle />
             <button
               onClick={() => setIsOpen(!isOpen)}
-              className="inline-flex items-center justify-center rounded-md p-2 text-muted-foreground hover:text-foreground hover:bg-muted transition-colors"
+              className="inline-flex items-center justify-center p-2 transition-colors rounded-md text-muted-foreground hover:text-foreground hover:bg-muted"
               aria-label="Open main menu"
               aria-expanded={isOpen}
             >
               {isOpen ? (
-                <X className="h-6 w-6" />
+                <X className="w-6 h-6" />
               ) : (
-                <Menu className="h-6 w-6" />
+                <Menu className="w-6 h-6" />
               )}
             </button>
           </div>
@@ -194,9 +189,9 @@ export function Navbar({ profileData }: NavbarProps) {
               animate={{ opacity: 1, height: "auto" }}
               exit={{ opacity: 0, height: 0 }}
               transition={{ duration: 0.2 }}
-              className="md:hidden overflow-hidden"
+              className="overflow-hidden md:hidden"
             >
-              <div className="px-2 pt-2 pb-3 space-y-1 bg-background border-t border-border">
+              <div className="px-2 pt-2 pb-3 space-y-1 border-t bg-background border-border">
                 {navItems.map((item) => (
                   <Link
                     key={item.href}
@@ -211,11 +206,11 @@ export function Navbar({ profileData }: NavbarProps) {
                     {item.label}
                   </Link>
                 ))}
-                <div className="pt-4 border-t border-border mt-4">
+                <div className="pt-4 mt-4 border-t border-border">
                   <Link
                     href="#contact"
                     onClick={(e) => handleAnchorClick(e, "#contact")}
-                    className="block w-full text-center rounded-full bg-primary px-6 py-2 text-sm font-medium text-primary-foreground hover:bg-primary/90 transition-colors"
+                    className="block w-full px-6 py-2 text-sm font-medium text-center transition-colors rounded-full bg-primary text-primary-foreground hover:bg-primary/90"
                   >
                     {ctaLabel}
                   </Link>
