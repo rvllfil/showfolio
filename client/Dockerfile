@@ -11,7 +11,11 @@ COPY package*.json ./
 
 # Install dependencies with npm ci for reproducible builds
 # Use --prefer-offline to use cache if available
-RUN npm ci --prefer-offline --no-audit --progress=false
+# Add timeout and retry for unstable VPS network
+RUN npm config set fetch-timeout 600000 && \
+    npm config set fetch-retries 5 && \
+    npm ci --prefer-offline --no-audit --progress=false || \
+    npm ci --no-audit --progress=false
 
 # Stage 2: Build
 FROM node:20-alpine AS build
@@ -54,7 +58,11 @@ ENV NODE_OPTIONS="--max-old-space-size=384"
 COPY package*.json ./
 
 # Install production dependencies only (faster, no dev deps)
-RUN npm ci --omit=dev --prefer-offline --no-audit --progress=false
+# Add timeout and retry for unstable VPS network
+RUN npm config set fetch-timeout 600000 && \
+    npm config set fetch-retries 5 && \
+    npm ci --omit=dev --prefer-offline --no-audit --progress=false || \
+    npm ci --omit=dev --no-audit --progress=false
 
 # Copy built application from build stage
 COPY --from=build /app/.next ./.next

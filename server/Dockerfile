@@ -10,7 +10,11 @@ RUN apk add --no-cache python3 make g++ libc6-compat
 COPY package*.json ./
 
 # Install all dependencies (including devDependencies for build)
-RUN npm ci --prefer-offline --no-audit --progress=false
+# Add timeout and retry for unstable VPS network
+RUN npm config set fetch-timeout 600000 && \
+    npm config set fetch-retries 5 && \
+    npm ci --prefer-offline --no-audit --progress=false || \
+    npm ci --no-audit --progress=false
 
 # Stage 2: Build
 FROM node:20-alpine AS build
@@ -55,6 +59,13 @@ COPY --from=build /app/public ./public
 COPY --from=build /app/dist/config ./config
 COPY --from=build /app/database ./database
 COPY --from=build /app/dist/src ./src
+
+# Install production dependencies only
+# Add timeout and retry for unstable VPS network
+RUN npm config set fetch-timeout 600000 && \
+    npm config set fetch-retries 5 && \
+    npm ci --omit=dev --prefer-offline --no-audit --progress=false || \
+    npm ci --omit=dev --no-audit --progress=false
 
 # Create uploads directory (will be mounted as volume)
 RUN mkdir -p /app/public/uploads
