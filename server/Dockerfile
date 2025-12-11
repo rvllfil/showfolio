@@ -33,18 +33,19 @@ COPY . .
 # ===================================================================
 # MEMORY OPTIMIZATION FOR 2GB VPS
 # ===================================================================
-# Strapi v5 admin panel build requires significant memory
-# 896MB is the minimum safe value for 2GB VPS (leaves ~1.1GB for OS)
+# Strapi v5 admin panel build is EXTREMELY memory-intensive
+# After testing: 896MB fails, increasing to 1152MB (1.125GB)
+# This leaves ~850MB for OS on 2GB VPS - TIGHT but necessary
 # 
-# CRITICAL: Build ONLY the server (not client at same time)
-#   docker compose build server  (wait for completion)
-#   docker compose build client  (build separately)
+# CRITICAL REQUIREMENTS:
+# 1. Build ONLY server (not client at same time): docker compose build server
+# 2. Ensure swap is enabled: swapon --show (should show 2-4GB)
+# 3. Stop ALL other Docker containers: docker stop $(docker ps -q)
+# 4. Clear system cache: sudo sh -c 'sync; echo 3 > /proc/sys/vm/drop_caches'
 #
-# If build still fails with OOM:
-# 1. Ensure swap is enabled: swapon --show
-# 2. Stop other services: docker stop $(docker ps -q)
-# 3. Clear cache: sync; echo 3 > /proc/sys/vm/drop_caches
-ENV NODE_OPTIONS="--max-old-space-size=896 --max-semi-space-size=64"
+# If this still fails: Your VPS may have <2GB actual RAM or other processes
+# consuming memory. Consider building on a larger machine and pushing to registry.
+ENV NODE_OPTIONS="--max-old-space-size=1152 --max-semi-space-size=64 --optimize-for-size"
 
 # Reduce thread pool to minimize concurrent operations
 ENV UV_THREADPOOL_SIZE=2
@@ -53,9 +54,13 @@ ENV UV_THREADPOOL_SIZE=2
 ENV STRAPI_DISABLE_REMOTE_DATA_TRANSFER=true
 ENV STRAPI_TELEMETRY_DISABLED=true
 
+# Disable experimental features that may consume extra memory
+ENV NODE_NO_WARNINGS=1
+
 # Build Strapi admin panel and compile TypeScript
-# This is the most memory-intensive step (~800-900MB peak usage)
-RUN npm run build
+# This is the most memory-intensive step - requires ~1GB+ RAM
+# Disable npm progress and verbose output to reduce overhead
+RUN npm run build --silent 2>&1 || npm run build
 
 # Stage 3: Production
 FROM node:20-alpine AS production

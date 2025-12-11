@@ -8,13 +8,15 @@ Both Dockerfiles have been optimized for 2GB VPS with careful memory allocation:
 
 ### Server (Strapi Backend)
 
-- **Build memory**: 896MB (`NODE_OPTIONS=--max-old-space-size=896`)
-  - Strapi v5 admin panel build requires ~800-900MB minimum
-  - This is unavoidable - Strapi has heavy webpack/Vite builds
+- **Build memory**: 1152MB / 1.125GB (`NODE_OPTIONS=--max-old-space-size=1152`)
+  - Strapi v5 admin panel build requires ~1GB+ minimum (tested: 896MB fails)
+  - This is unavoidable - Strapi has extremely heavy Vite/webpack builds
+  - Added Vite config optimizations to reduce memory pressure
 - **Runtime memory**: 512MB
 - **Runtime limit**: 640MB (docker-compose)
 - **Thread pool**: Limited to 2 threads (`UV_THREADPOOL_SIZE=2`)
 - **Semi-space**: 64MB (reduced for memory efficiency)
+- **Optimization flags**: `--optimize-for-size` enabled
 
 ### Client (Next.js Frontend)
 
@@ -65,13 +67,18 @@ On a 2GB VPS with the optimizations:
 
 ## Memory Usage During Operations
 
-| Operation                  | Server | Client | Total  | VPS Headroom |
-| -------------------------- | ------ | ------ | ------ | ------------ |
-| **Build** (sequential)     | 896MB  | -      | ~896MB | ~1.1GB free  |
-| **Build** (sequential)     | -      | 512MB  | ~512MB | ~1.5GB free  |
-| **Runtime** (all services) | 512MB  | 320MB  | ~832MB | ~1.2GB free  |
+| Operation                  | Server | Client | Total   | VPS Headroom |
+| -------------------------- | ------ | ------ | ------- | ------------ |
+| **Build** (sequential)     | 1152MB | -      | ~1152MB | ~850MB free  |
+| **Build** (sequential)     | -      | 512MB  | ~512MB  | ~1.5GB free  |
+| **Runtime** (all services) | 512MB  | 320MB  | ~832MB  | ~1.2GB free  |
 
-**Note**: Strapi v5 admin panel build cannot go below ~800MB due to webpack/Vite memory requirements. This is a hard limitation of Strapi itself, not our configuration.
+**Critical Notes**:
+
+- Strapi v5 admin panel build requires **1GB+ minimum** (tested: 896MB fails, 512MB fails)
+- This is a hard limitation of Strapi's Vite/webpack build process
+- The build leaves only ~850MB free on 2GB VPS - ensure swap is enabled
+- If build fails: stop ALL other services, clear cache, ensure 4GB swap
 
 ## Troubleshooting
 

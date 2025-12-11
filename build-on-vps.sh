@@ -47,8 +47,11 @@ echo ""
 echo "============================================"
 echo "Step 1/2: Building Strapi Backend (server)"
 echo "============================================"
-echo "This will take 5-10 minutes and use up to 896MB RAM"
-echo "Peak memory usage will be around 1.2-1.4GB total"
+echo "⚠️  CRITICAL: This will use 1.15GB RAM for Node.js build"
+echo "   Peak system usage will be ~1.5-1.6GB total"
+echo "   Ensure ALL other services are stopped!"
+echo ""
+echo "This will take 5-10 minutes..."
 echo ""
 
 # Build server
