@@ -26,9 +26,10 @@ COPY --from=deps /app/node_modules ./node_modules
 # Copy application code
 COPY . .
 
-# Optimize Node.js memory for Strapi build (768MB for low-spec VPS)
-# Strapi build can be memory-intensive, adjust based on your VPS
-ENV NODE_OPTIONS="--max-old-space-size=768"
+# Optimize Node.js memory for Strapi build (2GB for VPS)
+# Strapi admin panel build is very memory-intensive
+# Increase this if your VPS has more RAM, or build on CI/CD if VPS has <2GB
+ENV NODE_OPTIONS="--max-old-space-size=2048"
 
 # Build Strapi admin panel and compile TypeScript
 RUN npm run build
