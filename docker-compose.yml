@@ -1,17 +1,26 @@
 # ============================================================================
-# DOCKER COMPOSE CONFIGURATION FOR 2GB VPS
+# RUNTIME DOCKER COMPOSE - For VPS deployment using pre-built images
 # ============================================================================
-# IMPORTANT: For low-memory VPS (2GB RAM), build services SEQUENTIALLY:
+# This file pulls pre-built images from Docker Hub and runs them.
+# NO building happens on the VPS.
 #
-#   docker compose build server   # Build Strapi first
-#   docker compose build client   # Build Next.js second
-#   docker compose up -d          # Start all services
+# PREREQUISITES:
+#   1. Images must be built and pushed to Docker Hub first
+#      (see docker-compose.build.yml)
+#   2. Replace 'USERNAME' with your Docker Hub username
+#   3. Create .env file with your configuration
 #
-# Do NOT use 'docker compose up --build' as it may build in parallel
-# and cause OOM (Out of Memory) errors on 2GB VPS.
+# DEPLOYMENT ON VPS:
+#   1. Pull latest images:
+#        docker compose pull
 #
-# For VPS with <2GB RAM, consider building images on a separate machine
-# with more memory, pushing to a registry, and pulling on the VPS.
+#   2. Start services:
+#        docker compose up -d
+#
+#   3. View logs:
+#        docker compose logs -f
+#
+# This approach works perfectly on 2GB VPS since no building is required.
 # ============================================================================
 
 services:
@@ -36,14 +45,9 @@ services:
       timeout: 5s
       retries: 5
 
-  # Strapi Backend
+  # Strapi Backend - Using pre-built image from Docker Hub
   server:
-    build:
-      context: ./server
-      dockerfile: Dockerfile
-      # Build args for optimization (optional)
-      # args:
-      #   - BUILDKIT_INLINE_CACHE=1
+    image: USERNAME/showfolio-server:latest
     container_name: showfolio-strapi
     restart: unless-stopped
     ports:
@@ -99,16 +103,9 @@ services:
       retries: 5
       start_period: 30s
 
-  # Next.js Frontend
+  # Next.js Frontend - Using pre-built image from Docker Hub
   client:
-    build:
-      context: ./client
-      dockerfile: Dockerfile
-      args:
-        NEXT_PUBLIC_API_URL: ${NEXT_PUBLIC_API_URL:-http://localhost:1337}
-      # Build args for optimization (optional)
-      # args:
-      #   - BUILDKIT_INLINE_CACHE=1
+    image: USERNAME/showfolio-client:latest
     container_name: showfolio-client
     restart: unless-stopped
     ports:

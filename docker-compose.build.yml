@@ -1,0 +1,44 @@
+# ============================================================================
+# BUILD COMPOSE FILE - For building and pushing images to Docker Hub
+# ============================================================================
+# This file is used on your LOCAL machine or CI/CD to build Docker images
+# and push them to Docker Hub.
+#
+# USAGE:
+#   1. Login to Docker Hub:
+#        docker login
+#
+#   2. Replace 'USERNAME' with your Docker Hub username in this file
+#
+#   3. Build images:
+#        docker compose -f docker-compose.build.yml build
+#
+#   4. Push to Docker Hub:
+#        docker compose -f docker-compose.build.yml push
+#
+# After pushing, use docker-compose.yml on VPS to pull and run.
+# ============================================================================
+
+services:
+  # Strapi Backend - Build and tag for Docker Hub
+  server:
+    build:
+      context: ./server
+      dockerfile: Dockerfile
+      args:
+        # Add any build args if needed
+        NODE_ENV: production
+    image: USERNAME/showfolio-server:latest
+    # No runtime config needed for build-only file
+
+  # Next.js Frontend - Build and tag for Docker Hub
+  client:
+    build:
+      context: ./client
+      dockerfile: Dockerfile
+      args:
+        # Replace with your production API URL
+        NEXT_PUBLIC_API_URL: ${NEXT_PUBLIC_API_URL:-http://localhost:1337}
+    image: USERNAME/showfolio-client:latest
+    # No runtime config needed for build-only file
+# Note: Database uses official postgres:15-alpine, no build needed
