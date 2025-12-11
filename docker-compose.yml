@@ -51,11 +51,11 @@ services:
     # ========================================================================
     # RUNTIME MEMORY LIMITS FOR 2GB VPS
     # ========================================================================
-    # Strapi runtime: limit to 768MB RAM, allow swap if needed
-    # Build uses 512MB (set in Dockerfile), runtime can use up to 768MB
-    mem_limit: 768m # Hard limit: 768MB RAM
-    mem_reservation: 512m # Soft limit: reserve 512MB minimum
-    memswap_limit: 1024m # Allow 256MB swap (768 + 256 = 1024)
+    # Strapi runtime can use less memory than build
+    # Build uses 896MB (set in Dockerfile), runtime needs only 512-640MB
+    mem_limit: 640m # Hard limit: 640MB RAM for runtime
+    mem_reservation: 384m # Soft limit: reserve 384MB minimum
+    memswap_limit: 896m # Allow 256MB swap (640 + 256 = 896)
     # CPU limits (optional - uncomment if needed)
     # cpus: '1.0'                # Limit to 1 CPU core
     environment:

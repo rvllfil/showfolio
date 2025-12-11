@@ -31,20 +31,30 @@ COPY --from=deps /app/node_modules ./node_modules
 COPY . .
 
 # ===================================================================
-# MEMORY OPTIMIZATION FOR 2GB VPS (targeting ~1GB build budget)
+# MEMORY OPTIMIZATION FOR 2GB VPS
 # ===================================================================
-# Limit Node.js heap to 512MB (safe for 2GB VPS with OS overhead)
-# This prevents OOM kills during Strapi admin panel build
-ENV NODE_OPTIONS="--max-old-space-size=512"
+# Strapi v5 admin panel build requires significant memory
+# 896MB is the minimum safe value for 2GB VPS (leaves ~1.1GB for OS)
+# 
+# CRITICAL: Build ONLY the server (not client at same time)
+#   docker compose build server  (wait for completion)
+#   docker compose build client  (build separately)
+#
+# If build still fails with OOM:
+# 1. Ensure swap is enabled: swapon --show
+# 2. Stop other services: docker stop $(docker ps -q)
+# 3. Clear cache: sync; echo 3 > /proc/sys/vm/drop_caches
+ENV NODE_OPTIONS="--max-old-space-size=896 --max-semi-space-size=64"
 
-# Reduce thread pool size to limit concurrent operations
+# Reduce thread pool to minimize concurrent operations
 ENV UV_THREADPOOL_SIZE=2
 
-# Disable remote data transfer to reduce memory overhead
+# Disable telemetry and remote data transfer
 ENV STRAPI_DISABLE_REMOTE_DATA_TRANSFER=true
+ENV STRAPI_TELEMETRY_DISABLED=true
 
 # Build Strapi admin panel and compile TypeScript
-# The admin build is the most memory-intensive step
+# This is the most memory-intensive step (~800-900MB peak usage)
 RUN npm run build
 
 # Stage 3: Production
@@ -85,10 +95,11 @@ ENV NODE_ENV=production
 ENV HOST=0.0.0.0
 ENV PORT=1337
 
-# Runtime memory limit (384MB) - sufficient for Strapi production on 2GB VPS
-# Build stage uses 512MB, runtime can use less
-ENV NODE_OPTIONS="--max-old-space-size=384"
+# Runtime memory limit - lower than build (512MB for runtime vs 896MB for build)
+# Strapi production runtime uses significantly less memory than admin build
+ENV NODE_OPTIONS="--max-old-space-size=512"
 ENV UV_THREADPOOL_SIZE=2
+ENV STRAPI_TELEMETRY_DISABLED=true
 
 # Expose port
 EXPOSE 1337

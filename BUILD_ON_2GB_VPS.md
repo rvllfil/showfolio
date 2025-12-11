@@ -4,14 +4,17 @@ This guide explains how to safely build and deploy Showfolio on a VPS with only 
 
 ## Memory Optimizations Applied
 
-Both Dockerfiles have been optimized to work within ~1GB memory budget during builds:
+Both Dockerfiles have been optimized for 2GB VPS with careful memory allocation:
 
 ### Server (Strapi Backend)
 
-- **Build memory**: 512MB (`NODE_OPTIONS=--max-old-space-size=512`)
-- **Runtime memory**: 384MB
-- **Runtime limit**: 768MB (docker-compose)
+- **Build memory**: 896MB (`NODE_OPTIONS=--max-old-space-size=896`)
+  - Strapi v5 admin panel build requires ~800-900MB minimum
+  - This is unavoidable - Strapi has heavy webpack/Vite builds
+- **Runtime memory**: 512MB
+- **Runtime limit**: 640MB (docker-compose)
 - **Thread pool**: Limited to 2 threads (`UV_THREADPOOL_SIZE=2`)
+- **Semi-space**: 64MB (reduced for memory efficiency)
 
 ### Client (Next.js Frontend)
 
@@ -64,9 +67,11 @@ On a 2GB VPS with the optimizations:
 
 | Operation                  | Server | Client | Total  | VPS Headroom |
 | -------------------------- | ------ | ------ | ------ | ------------ |
-| **Build** (sequential)     | 512MB  | -      | ~512MB | ~1.5GB free  |
+| **Build** (sequential)     | 896MB  | -      | ~896MB | ~1.1GB free  |
 | **Build** (sequential)     | -      | 512MB  | ~512MB | ~1.5GB free  |
-| **Runtime** (all services) | 384MB  | 320MB  | ~700MB | ~1.3GB free  |
+| **Runtime** (all services) | 512MB  | 320MB  | ~832MB | ~1.2GB free  |
+
+**Note**: Strapi v5 admin panel build cannot go below ~800MB due to webpack/Vite memory requirements. This is a hard limitation of Strapi itself, not our configuration.
 
 ## Troubleshooting
 
