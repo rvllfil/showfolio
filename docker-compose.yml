@@ -5,9 +5,9 @@ services:
     container_name: showfolio-db
     restart: unless-stopped
     environment:
-      POSTGRES_DB: showfolio
-      POSTGRES_USER: showfolio
-      POSTGRES_PASSWORD: showfolio
+      POSTGRES_DB: ${POSTGRES_DB:-showfolio}
+      POSTGRES_USER: ${POSTGRES_USER:-showfolio}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-showfolio}
     ports:
       - "5432:5432"
     volumes:
@@ -15,7 +15,7 @@ services:
     networks:
       - showfolio-network
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U showfolio"]
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-showfolio}"]
       interval: 10s
       timeout: 5s
       retries: 5
@@ -30,23 +30,31 @@ services:
     ports:
       - "1337:1337"
     environment:
-      NODE_ENV: production
-      HOST: 0.0.0.0
-      PORT: 1337
+      NODE_ENV: ${NODE_ENV:-production}
+      HOST: ${HOST:-0.0.0.0}
+      PORT: ${PORT:-1337}
+      # Application URLs
+      APP_URL: ${APP_URL:-http://localhost:1337}
+      ADMIN_URL: ${ADMIN_URL:-http://localhost:1337/admin}
       # Database Configuration
-      DATABASE_CLIENT: postgres
-      DATABASE_HOST: db
-      DATABASE_PORT: 5432
-      DATABASE_NAME: showfolio
-      DATABASE_USERNAME: showfolio
-      DATABASE_PASSWORD: showfolio
-      DATABASE_SSL: false
-      # Strapi Secrets (Change these in production!)
+      DATABASE_CLIENT: ${DATABASE_CLIENT:-postgres}
+      DATABASE_HOST: ${DATABASE_HOST:-db}
+      DATABASE_PORT: ${DATABASE_PORT:-5432}
+      DATABASE_NAME: ${DATABASE_NAME:-showfolio}
+      DATABASE_USERNAME: ${DATABASE_USERNAME:-showfolio}
+      DATABASE_PASSWORD: ${DATABASE_PASSWORD:-showfolio}
+      DATABASE_SSL: ${DATABASE_SSL:-false}
+      # Strapi Security Keys
       APP_KEYS: ${APP_KEYS:-toBeModified1,toBeModified2}
       API_TOKEN_SALT: ${API_TOKEN_SALT:-tobemodified}
       ADMIN_JWT_SECRET: ${ADMIN_JWT_SECRET:-tobemodified}
       TRANSFER_TOKEN_SALT: ${TRANSFER_TOKEN_SALT:-tobemodified}
       JWT_SECRET: ${JWT_SECRET:-tobemodified}
+      ENCRYPTION_KEY: ${ENCRYPTION_KEY:-tobemodified}
+      # File Upload
+      MAX_FILE_SIZE: ${MAX_FILE_SIZE:-209715200}
+      # CORS
+      CORS_ORIGINS: ${CORS_ORIGINS:-http://localhost:3000,http://localhost:1337}
     volumes:
       - ./server/public/uploads:/app/public/uploads
       - strapi_data:/app/.tmp
@@ -74,11 +82,15 @@ services:
     ports:
       - "3000:3000"
     environment:
-      NODE_ENV: production
+      NODE_ENV: ${NODE_ENV:-production}
       # Public API URL for client-side requests (browser)
       NEXT_PUBLIC_API_URL: ${NEXT_PUBLIC_API_URL:-http://localhost:1337}
       # Server-side API URL (inside Docker network)
-      API_URL: http://server:1337
+      API_URL: ${API_URL:-http://server:1337}
+      # Optional analytics
+      NEXT_PUBLIC_GA_ID: ${NEXT_PUBLIC_GA_ID:-}
+      NEXT_PUBLIC_GTM_ID: ${NEXT_PUBLIC_GTM_ID:-}
+      NEXT_PUBLIC_SITE_URL: ${NEXT_PUBLIC_SITE_URL:-}
     networks:
       - showfolio-network
     depends_on:

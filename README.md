@@ -145,14 +145,14 @@ git clone https://github.com/yourusername/showfolio.git
 cd showfolio
 ```
 
-### Step 2: Setup Environment Files
+### Step 2: Setup Environment File
 
-Copy the example environment files:
+**✅ Centralized Configuration**: All environment variables are in ONE file at the project root.
+
+Copy the example environment file:
 
 ```bash
 cp .env.example .env
-cp server/.env.example server/.env
-cp client/.env.example client/.env
 ```
 
 **Important: Generate Secure Secrets for Production**
@@ -176,7 +176,9 @@ node -e "console.log('TRANSFER_TOKEN_SALT=' + require('crypto').randomBytes(16).
 node -e "console.log('JWT_SECRET=' + require('crypto').randomBytes(16).toString('base64'))"
 ```
 
-Then update these values in both `.env` and `server/.env` files.
+Then update these values in the root `.env` file.
+
+> **📝 Note**: You do NOT need to create `client/.env` or `server/.env` files. Docker Compose automatically loads variables from the root `.env` and passes them to each service.
 
 **Environment Variables to Configure:**
 
@@ -390,13 +392,9 @@ cd server
 npm install
 ```
 
-3. **Configure environment**:
+3. **Configure environment** (use root `.env` file):
 
-```bash
-cp .env.example .env
-```
-
-Edit `.env` and set your database configuration. For local development, you can use SQLite:
+For local development without Docker, copy variables from root `.env.example` to root `.env`:
 
 ```env
 DATABASE_CLIENT=sqlite
@@ -436,13 +434,9 @@ cd client
 npm install
 ```
 
-3. **Configure environment**:
+3. **Configure environment** (use root `.env` file):
 
-```bash
-cp .env.example .env
-```
-
-Edit `.env` and set:
+Make sure the root `.env` file has:
 
 ```env
 NEXT_PUBLIC_API_URL=http://localhost:1337
@@ -564,19 +558,20 @@ git clone https://github.com/yourusername/showfolio.git
 cd showfolio
 ```
 
-3. **Setup environment files**:
+3. **Setup environment file**:
 
 ```bash
 cp .env.example .env
-cp server/.env.example server/.env
-cp client/.env.example client/.env
 ```
 
-Edit `.env` files and set:
+Edit the root `.env` file and set:
 
 - Generate new secure secrets (use the crypto commands above)
-- Set `NEXT_PUBLIC_API_URL` to your domain or server IP
-- Change database passwords
+- Set `NEXT_PUBLIC_API_URL` to your domain or server IP (e.g., `https://api.yourdomain.com`)
+- Change `POSTGRES_PASSWORD` to a secure password
+- Update `APP_URL` and `ADMIN_URL` to your production URLs
+
+> **📝 Note**: You only need ONE `.env` file at the root. Do NOT create separate `.env` files in `client/` or `server/` directories.
 
 4. **Start services**:
 
@@ -649,17 +644,15 @@ sudo certbot --nginx -d yourdomain.com
 
 6. **Update environment variables for HTTPS**:
 
-Edit `server/.env`:
+Edit the root `.env` file:
 
 ```env
+# Backend URLs
 APP_URL=https://yourdomain.com
 ADMIN_URL=https://yourdomain.com/admin
 CORS_ORIGINS=https://yourdomain.com
-```
 
-Edit `client/.env`:
-
-```env
+# Frontend URL
 NEXT_PUBLIC_API_URL=https://yourdomain.com
 ```
 

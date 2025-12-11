@@ -5,9 +5,9 @@ services:
     container_name: showfolio-db-dev
     restart: unless-stopped
     environment:
-      POSTGRES_DB: showfolio
-      POSTGRES_USER: showfolio
-      POSTGRES_PASSWORD: showfolio
+      POSTGRES_DB: ${POSTGRES_DB:-showfolio}
+      POSTGRES_USER: ${POSTGRES_USER:-showfolio}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-showfolio}
     ports:
       - "5432:5432"
     volumes:
@@ -26,22 +26,27 @@ services:
       - "1337:1337"
     environment:
       NODE_ENV: development
-      HOST: 0.0.0.0
-      PORT: 1337
+      HOST: ${HOST:-0.0.0.0}
+      PORT: ${PORT:-1337}
+      APP_URL: ${APP_URL:-http://localhost:1337}
+      ADMIN_URL: ${ADMIN_URL:-http://localhost:1337/admin}
       # Database Configuration
-      DATABASE_CLIENT: postgres
-      DATABASE_HOST: db
-      DATABASE_PORT: 5432
-      DATABASE_NAME: showfolio
-      DATABASE_USERNAME: showfolio
-      DATABASE_PASSWORD: showfolio
-      DATABASE_SSL: false
-      # Strapi Secrets
+      DATABASE_CLIENT: ${DATABASE_CLIENT:-postgres}
+      DATABASE_HOST: ${DATABASE_HOST:-db}
+      DATABASE_PORT: ${DATABASE_PORT:-5432}
+      DATABASE_NAME: ${DATABASE_NAME:-showfolio}
+      DATABASE_USERNAME: ${DATABASE_USERNAME:-showfolio}
+      DATABASE_PASSWORD: ${DATABASE_PASSWORD:-showfolio}
+      DATABASE_SSL: ${DATABASE_SSL:-false}
+      # Strapi Security Keys
       APP_KEYS: ${APP_KEYS:-toBeModified1,toBeModified2}
       API_TOKEN_SALT: ${API_TOKEN_SALT:-tobemodified}
       ADMIN_JWT_SECRET: ${ADMIN_JWT_SECRET:-tobemodified}
       TRANSFER_TOKEN_SALT: ${TRANSFER_TOKEN_SALT:-tobemodified}
       JWT_SECRET: ${JWT_SECRET:-tobemodified}
+      ENCRYPTION_KEY: ${ENCRYPTION_KEY:-tobemodified}
+      MAX_FILE_SIZE: ${MAX_FILE_SIZE:-209715200}
+      CORS_ORIGINS: ${CORS_ORIGINS:-http://localhost:3000,http://localhost:1337}
     volumes:
       - ./server:/app
       - /app/node_modules
@@ -64,6 +69,7 @@ services:
     environment:
       NODE_ENV: development
       NEXT_PUBLIC_API_URL: ${NEXT_PUBLIC_API_URL:-http://localhost:1337}
+      API_URL: ${API_URL:-http://server:1337}
       # Watch for changes
       WATCHPACK_POLLING: true
     volumes:
