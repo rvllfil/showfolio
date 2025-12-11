@@ -25,10 +25,22 @@ services:
     build:
       context: ./server
       dockerfile: Dockerfile
+      # Build args for optimization (optional)
+      # args:
+      #   - BUILDKIT_INLINE_CACHE=1
     container_name: showfolio-strapi
     restart: unless-stopped
     ports:
       - "1337:1337"
+    # Resource limits for low-spec VPS (uncomment and adjust as needed)
+    # deploy:
+    #   resources:
+    #     limits:
+    #       cpus: '1.0'          # Limit to 1 CPU core
+    #       memory: 1G           # Limit to 1GB RAM
+    #     reservations:
+    #       cpus: '0.5'          # Reserve at least 0.5 CPU
+    #       memory: 512M         # Reserve at least 512MB RAM
     environment:
       NODE_ENV: ${NODE_ENV:-production}
       HOST: ${HOST:-0.0.0.0}
@@ -77,10 +89,22 @@ services:
       dockerfile: Dockerfile
       args:
         NEXT_PUBLIC_API_URL: ${NEXT_PUBLIC_API_URL:-http://localhost:1337}
+      # Build args for optimization (optional)
+      # args:
+      #   - BUILDKIT_INLINE_CACHE=1
     container_name: showfolio-client
     restart: unless-stopped
     ports:
       - "3000:3000"
+    # Resource limits for low-spec VPS (uncomment and adjust as needed)
+    # deploy:
+    #   resources:
+    #     limits:
+    #       cpus: '0.75'         # Limit to 0.75 CPU cores
+    #       memory: 768M         # Limit to 768MB RAM
+    #     reservations:
+    #       cpus: '0.25'         # Reserve at least 0.25 CPU
+    #       memory: 256M         # Reserve at least 256MB RAM
     environment:
       NODE_ENV: ${NODE_ENV:-production}
       # Public API URL for client-side requests (browser)
