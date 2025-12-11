@@ -33,12 +33,21 @@ ARG NEXT_PUBLIC_API_URL
 ENV NEXT_PUBLIC_API_URL=${NEXT_PUBLIC_API_URL}
 ENV DOCKER_BUILD=true
 
-# Optimize Node.js memory for low-spec VPS (limit to 768MB during build)
-# Adjust this value based on your VPS RAM (512MB, 1GB, 2GB, etc.)
-ENV NODE_OPTIONS="--max-old-space-size=768"
+# ===================================================================
+# MEMORY OPTIMIZATION FOR 2GB VPS (targeting ~1GB build budget)
+# ===================================================================
+# Limit Node.js heap to 512MB (safe for 2GB VPS with OS overhead)
+ENV NODE_OPTIONS="--max-old-space-size=512"
+
+# Reduce thread pool size to limit concurrent operations
+ENV UV_THREADPOOL_SIZE=2
+
+# Disable Next.js telemetry to reduce overhead
+ENV NEXT_TELEMETRY_DISABLED=1
 
 # Build Next.js application
 # Using standalone output reduces final image size significantly
+# SWC compiler is used by default (faster, less memory than Babel)
 RUN npm run build
 
 # Stage 3: Production
@@ -49,9 +58,11 @@ WORKDIR /app
 # Set production environment
 ENV NODE_ENV=production
 
-# Optimize Node.js memory for production runtime (384MB for low-spec VPS)
-# Increase if your VPS has more RAM available
-ENV NODE_OPTIONS="--max-old-space-size=384"
+# Runtime memory limit (320MB) - Next.js runtime is lighter than build
+# Sufficient for serving static/SSR pages on 2GB VPS
+ENV NODE_OPTIONS="--max-old-space-size=320"
+ENV UV_THREADPOOL_SIZE=2
+ENV NEXT_TELEMETRY_DISABLED=1
 
 # Install only production runtime dependencies (if Next.js standalone is not used)
 # Copy package files

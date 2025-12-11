@@ -1,3 +1,19 @@
+# ============================================================================
+# DOCKER COMPOSE CONFIGURATION FOR 2GB VPS
+# ============================================================================
+# IMPORTANT: For low-memory VPS (2GB RAM), build services SEQUENTIALLY:
+#
+#   docker compose build server   # Build Strapi first
+#   docker compose build client   # Build Next.js second
+#   docker compose up -d          # Start all services
+#
+# Do NOT use 'docker compose up --build' as it may build in parallel
+# and cause OOM (Out of Memory) errors on 2GB VPS.
+#
+# For VPS with <2GB RAM, consider building images on a separate machine
+# with more memory, pushing to a registry, and pulling on the VPS.
+# ============================================================================
+
 services:
   # PostgreSQL Database
   db:
@@ -32,15 +48,16 @@ services:
     restart: unless-stopped
     ports:
       - "1337:1337"
-    # Resource limits for low-spec VPS (uncomment and adjust as needed)
-    # deploy:
-    #   resources:
-    #     limits:
-    #       cpus: '1.0'          # Limit to 1 CPU core
-    #       memory: 1G           # Limit to 1GB RAM
-    #     reservations:
-    #       cpus: '0.5'          # Reserve at least 0.5 CPU
-    #       memory: 512M         # Reserve at least 512MB RAM
+    # ========================================================================
+    # RUNTIME MEMORY LIMITS FOR 2GB VPS
+    # ========================================================================
+    # Strapi runtime: limit to 768MB RAM, allow swap if needed
+    # Build uses 512MB (set in Dockerfile), runtime can use up to 768MB
+    mem_limit: 768m # Hard limit: 768MB RAM
+    mem_reservation: 512m # Soft limit: reserve 512MB minimum
+    memswap_limit: 1024m # Allow 256MB swap (768 + 256 = 1024)
+    # CPU limits (optional - uncomment if needed)
+    # cpus: '1.0'                # Limit to 1 CPU core
     environment:
       NODE_ENV: ${NODE_ENV:-production}
       HOST: ${HOST:-0.0.0.0}
@@ -96,15 +113,16 @@ services:
     restart: unless-stopped
     ports:
       - "3000:3000"
-    # Resource limits for low-spec VPS (uncomment and adjust as needed)
-    # deploy:
-    #   resources:
-    #     limits:
-    #       cpus: '0.75'         # Limit to 0.75 CPU cores
-    #       memory: 768M         # Limit to 768MB RAM
-    #     reservations:
-    #       cpus: '0.25'         # Reserve at least 0.25 CPU
-    #       memory: 256M         # Reserve at least 256MB RAM
+    # ========================================================================
+    # RUNTIME MEMORY LIMITS FOR 2GB VPS
+    # ========================================================================
+    # Next.js runtime: limit to 512MB RAM (lighter than Strapi)
+    # Build uses 512MB (set in Dockerfile), runtime uses 320MB
+    mem_limit: 512m # Hard limit: 512MB RAM
+    mem_reservation: 320m # Soft limit: reserve 320MB minimum
+    memswap_limit: 768m # Allow 256MB swap (512 + 256 = 768)
+    # CPU limits (optional - uncomment if needed)
+    # cpus: '0.75'               # Limit to 0.75 CPU cores
     environment:
       NODE_ENV: ${NODE_ENV:-production}
       # Public API URL for client-side requests (browser)
