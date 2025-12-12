@@ -7,12 +7,16 @@ const nextConfig: NextConfig = {
   // ===================================================================
   // MEMORY OPTIMIZATION FOR 2GB VPS
   // ===================================================================
-  // Reduce build workers to prevent memory spikes
+  // Next.js 16 uses Turbopack by default - configure for low memory
   experimental: {
     // Limit concurrent compilations (reduces memory usage)
     workerThreads: false,
     cpus: 1,
   },
+
+  // Empty turbopack config to silence warning and use Turbopack defaults
+  // Turbopack is more memory efficient than webpack
+  turbopack: {},
 
   // Disable source maps in production to save memory during build
   productionBrowserSourceMaps: false,
@@ -41,22 +45,6 @@ const nextConfig: NextConfig = {
         pathname: "/**",
       },
     ],
-  },
-
-  // Optimize webpack for low-memory environments
-  webpack: (config, { isServer }) => {
-    // Limit parallelism to reduce memory usage
-    config.parallelism = 1;
-
-    // Optimize memory usage
-    config.optimization = {
-      ...config.optimization,
-      // Reduce memory overhead during builds
-      moduleIds: "deterministic",
-      minimize: true,
-    };
-
-    return config;
   },
 };
 

@@ -45,7 +45,7 @@ COPY . .
 #
 # If this still fails: Your VPS may have <2GB actual RAM or other processes
 # consuming memory. Consider building on a larger machine and pushing to registry.
-ENV NODE_OPTIONS="--max-old-space-size=1152 --max-semi-space-size=64"
+ENV NODE_OPTIONS="--max-old-space-size=1536"
 
 # Reduce thread pool to minimize concurrent operations
 ENV UV_THREADPOOL_SIZE=2

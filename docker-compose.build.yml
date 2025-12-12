@@ -28,7 +28,7 @@ services:
       args:
         # Add any build args if needed
         NODE_ENV: production
-    image: USERNAME/showfolio-server:latest
+    image: upileasta/showfolio-server:latest
     # No runtime config needed for build-only file
 
   # Next.js Frontend - Build and tag for Docker Hub
@@ -39,6 +39,6 @@ services:
       args:
         # Replace with your production API URL
         NEXT_PUBLIC_API_URL: ${NEXT_PUBLIC_API_URL:-http://localhost:1337}
-    image: USERNAME/showfolio-client:latest
+    image: upileasta/showfolio-client:latest
     # No runtime config needed for build-only file
 # Note: Database uses official postgres:15-alpine, no build needed
