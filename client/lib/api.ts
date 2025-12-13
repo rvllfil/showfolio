@@ -8,12 +8,18 @@ import type {
   Service,
 } from "./types";
 
-const API_URL = process.env.NEXT_PUBLIC_API_URL;
+// Use different API URLs for server-side vs client-side
+// Server-side: use internal Docker network URL
+// Client-side: use public URL accessible from browser
+const API_URL =
+  typeof window === "undefined"
+    ? process.env.API_URL || process.env.NEXT_PUBLIC_API_URL // Server-side
+    : process.env.NEXT_PUBLIC_API_URL; // Client-side
 
 // Opsional: cek kalau API_URL belum di-set
 if (!API_URL) {
   throw new Error(
-    "NEXT_PUBLIC_API_URL is not defined. Please set it in client/.env.local"
+    "API_URL or NEXT_PUBLIC_API_URL is not defined. Please set it in environment variables"
   );
 }
 
