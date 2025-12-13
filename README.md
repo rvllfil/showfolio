@@ -21,7 +21,7 @@ Modern portfolio platform powered by Strapi CMS and Next.js. All content is mana
 ✅ **CMS-Managed Content** - All sections managed through Strapi  
 ✅ **Portfolio Management** - Create and manage unlimited projects  
 ✅ **Modern UI/UX** - Responsive design with dark/light mode  
-✅ **SEO & Performance** - Server-side rendering with Next.js  
+✅ **SEO & Performance** - Server-side rendering with Next.js
 
 ---
 
@@ -61,7 +61,6 @@ showfolio/
 ### Prerequisites
 
 - **Docker & Docker Compose** installed ([Install Docker](https://docs.docker.com/get-docker/))
-- **16GB RAM** (for building images locally - optional if using pre-built images)
 - **Docker Hub account** (only if you want to build and push your own images)
 
 ---
@@ -196,6 +195,7 @@ docker compose -f docker-compose.dev.yml logs -f
 #### Step 5: Access Your Portfolio
 
 Open in browser:
+
 - **Frontend:** http://localhost:3000
 - **Strapi Admin:** http://localhost:1337/admin
 
@@ -213,6 +213,7 @@ Open in browser:
 #### Step 7: Add Content (See "Content Setup Guide" below)
 
 Go to **Content Manager** and fill in:
+
 - **Profile** - Your personal info, logo, social links
 - **Portfolios** - Your projects
 - **Skills**, **Services**, **Testimonials** (optional)
@@ -294,7 +295,7 @@ This is the **recommended workflow** for production deployment. You build images
 ✅ **No building on VPS** - just pull pre-built images  
 ✅ **Works on 2GB RAM** - building requires 16GB, running needs only 2GB  
 ✅ **Fast deployment** - pull images in minutes instead of building for hours  
-✅ **Consistent builds** - same image everywhere  
+✅ **Consistent builds** - same image everywhere
 
 ---
 
@@ -388,6 +389,7 @@ docker compose -f docker-compose.build.yml build
 ```
 
 Build typically takes:
+
 - **First time:** 10-15 minutes
 - **Subsequent builds:** 5-8 minutes (with cache)
 
@@ -406,6 +408,7 @@ docker compose -f docker-compose.build.yml push
 ### Step 6: Verify Images on Docker Hub
 
 Visit https://hub.docker.com/u/your_username and you should see:
+
 - `showfolio-server:latest`
 - `showfolio-client:latest`
 
@@ -547,6 +550,7 @@ curl ifconfig.me
 ```
 
 Open in browser:
+
 - **Frontend:** `http://YOUR_SERVER_IP:3000`
 - **Strapi Admin:** `http://YOUR_SERVER_IP:1337/admin`
 
@@ -729,7 +733,6 @@ Profile is a **Single Type** - you only create it once.
 - **about:** Write paragraphs about yourself using the Rich Text Editor
   - Click the editor and format your text
   - Add bold, italics, links as needed
-  
 - **whatIDoList:** List your services/skills in this exact format:
   ```
   - Landing Page Development: Fast, responsive landing pages
@@ -847,21 +850,26 @@ Without setting permissions, your frontend **WILL NOT** display any content from
 Scroll down and expand each section, then check these boxes:
 
 **Portfolio (portfolios):**
+
 - ☑ find
 - ☑ findOne
 
 **Profile:**
+
 - ☑ find
 
 **Skill (skills):** (optional - if you use skills)
+
 - ☑ find
 - ☑ findOne
 
 **Service (services):** (optional - if you use services)
+
 - ☑ find
 - ☑ findOne
 
 **Testimonial (testimonials):** (optional - if you use testimonials)
+
 - ☑ find
 - ☑ findOne
 
@@ -1113,20 +1121,24 @@ docker system prune -a --volumes
 **Solutions:**
 
 1. **Check if Strapi is running:**
+
    ```bash
    docker compose ps
    # Strapi should show "Up"
    ```
 
 2. **Test Strapi API directly:**
+
    ```bash
    curl http://localhost:1337/api/profile?populate=*
    ```
+
    - If you get `403 Forbidden`: Permissions not set → Go to Strapi Settings → Roles → Public
    - If you get `404 Not Found`: Content not created → Add content in Content Manager
    - If you get `Connection refused`: Strapi not running → Check logs
 
 3. **Check permissions in Strapi:**
+
    - Settings → Users & Permissions Plugin → Roles → Public
    - Enable `find` and `findOne` for all content types
 
@@ -1145,7 +1157,6 @@ docker system prune -a --volumes
    - Content Manager → Profile
    - `lightLogo` should be your logo for LIGHT theme
    - `darkLogo` should be your logo for DARK theme
-   
 2. If you only have one logo, upload it to BOTH fields
 
 3. Clear browser cache and refresh
@@ -1168,22 +1179,25 @@ docker system prune -a --volumes
 **Solutions:**
 
 1. **Check logs:**
+
    ```bash
    docker compose logs
    ```
 
 2. **Common causes:**
+
    - Port already in use (3000, 1337, or 5432)
    - Invalid .env values
    - Insufficient memory
 
 3. **Fix port conflicts:**
+
    ```bash
    # Check what's using the port
    sudo lsof -i :3000
    sudo lsof -i :1337
    sudo lsof -i :5432
-   
+
    # Kill the process or change port in docker-compose.yml
    ```
 
@@ -1200,18 +1214,21 @@ docker system prune -a --volumes
 **Solutions:**
 
 1. **Check database is running:**
+
    ```bash
    docker compose ps
    # db should show "Up (healthy)"
    ```
 
 2. **Check database credentials in .env:**
+
    ```bash
    POSTGRES_USER=showfolio
    POSTGRES_PASSWORD=showfolio
    DATABASE_USERNAME=showfolio
    DATABASE_PASSWORD=showfolio
    ```
+
    These must match!
 
 3. **Restart database:**
@@ -1227,11 +1244,13 @@ docker system prune -a --volumes
 **Solutions:**
 
 1. **Don't build on 2GB VPS!** Use Docker Hub workflow:
+
    - Build locally (16GB RAM)
    - Push to Docker Hub
    - Pull on VPS (no building)
 
 2. **Enable swap on VPS:**
+
    ```bash
    sudo fallocate -l 2G /swapfile
    sudo chmod 600 /swapfile
@@ -1243,7 +1262,7 @@ docker system prune -a --volumes
 
 3. **Check memory limits in docker-compose.yml:**
    ```yaml
-   mem_limit: 640m        # Strapi
+   mem_limit: 640m # Strapi
    mem_reservation: 384m
    ```
 
@@ -1256,11 +1275,13 @@ docker system prune -a --volumes
 1. **Check internet connection** (Docker downloads packages)
 
 2. **Increase Docker resources:**
+
    - Docker Desktop → Settings → Resources
    - Increase Memory to 8GB+
    - Increase CPU to 4+
 
 3. **Build without cache:**
+
    ```bash
    docker compose -f docker-compose.build.yml build --no-cache
    ```
@@ -1308,11 +1329,13 @@ ports:
 **Solutions:**
 
 1. **Increase file size limit in .env:**
+
    ```bash
    MAX_FILE_SIZE=209715200  # 200MB in bytes
    ```
 
 2. **If using Nginx, update config:**
+
    ```nginx
    client_max_body_size 200M;
    ```
@@ -1332,6 +1355,7 @@ ports:
 1. **Clear browser cache** (Strapi admin uses lots of caching)
 
 2. **Check Strapi logs:**
+
    ```bash
    docker compose logs server
    ```
@@ -1349,11 +1373,13 @@ ports:
 **Solutions:**
 
 1. **Ensure .env file exists in project root:**
+
    ```bash
    ls -la .env
    ```
 
 2. **Restart containers after changing .env:**
+
    ```bash
    docker compose down
    docker compose up -d
@@ -1367,17 +1393,20 @@ ports:
 ### 🆘 Still Having Issues?
 
 1. **Check logs for all services:**
+
    ```bash
    docker compose logs -f
    ```
 
 2. **Try clean restart:**
+
    ```bash
    docker compose down -v  # WARNING: deletes database
    docker compose up -d
    ```
 
 3. **Verify Docker installation:**
+
    ```bash
    docker --version
    docker compose version
@@ -1451,6 +1480,7 @@ docker compose -f docker-compose.dev.yml up -d
 ### For Production (Docker Hub Workflow)
 
 **On Local Machine (Build):**
+
 ```bash
 cp .env.example .env                                    # Configure
 nano .env                                               # Set DOCKER_USERNAME
@@ -1460,6 +1490,7 @@ docker compose -f docker-compose.build.yml push         # Push to Docker Hub
 ```
 
 **On VPS (Deploy):**
+
 ```bash
 git clone https://github.com/rvllfil/showfolio.git
 cd showfolio
@@ -1477,7 +1508,7 @@ docker compose up -d                                    # Start services
 # Start
 docker compose up -d
 
-# Stop  
+# Stop
 docker compose down
 
 # Logs
