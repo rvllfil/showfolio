@@ -47,7 +47,7 @@ services:
 
   # Strapi Backend - Using pre-built image from Docker Hub
   server:
-    image: USERNAME/showfolio-server:latest
+    image: ${DOCKER_USERNAME}/showfolio-server:latest
     container_name: showfolio-strapi
     restart: unless-stopped
     ports:
@@ -105,7 +105,7 @@ services:
 
   # Next.js Frontend - Using pre-built image from Docker Hub
   client:
-    image: USERNAME/showfolio-client:latest
+    image: ${DOCKER_USERNAME}/showfolio-client:latest
     container_name: showfolio-client
     restart: unless-stopped
     ports:
