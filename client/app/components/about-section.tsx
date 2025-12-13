@@ -258,10 +258,23 @@ export function AboutSection({
                 </h3>
               </div>
               {profileData?.whatIDoList ? (
-                <div
-                  className="prose prose-sm dark:prose-invert max-w-none [&>ul]:space-y-3 [&>ul>li]:flex [&>ul>li]:items-start [&>ul>li]:gap-3 [&>ul>li]:text-sm [&>ul>li]:text-muted-foreground [&>ul>li]:before:content-[''] [&>ul>li]:before:w-1.5 [&>ul>li]:before:h-1.5 [&>ul>li]:before:rounded-full [&>ul>li]:before:bg-primary [&>ul>li]:before:mt-2 [&>ul>li]:before:shrink-0"
-                  dangerouslySetInnerHTML={{ __html: profileData.whatIDoList }}
-                />
+                <ul className="space-y-3">
+                  {profileData.whatIDoList
+                    .split("\n")
+                    .filter((line) => line.trim().startsWith("-"))
+                    .map((line, index) => {
+                      // Remove leading dash and trim
+                      const text = line.trim().replace(/^-\s*/, "");
+                      return (
+                        <li key={index} className="flex items-start gap-3">
+                          <div className="w-1.5 h-1.5 rounded-full bg-primary mt-2 shrink-0" />
+                          <span className="text-sm text-muted-foreground">
+                            {text}
+                          </span>
+                        </li>
+                      );
+                    })}
+                </ul>
               ) : (
                 <ul className="space-y-3">
                   <li className="flex items-start gap-3">
