@@ -115,6 +115,16 @@ docker compose -f docker-compose.dev.yml down
 
 This workflow allows you to build images locally (or on a powerful machine) and deploy to any server including low-spec VPS (2GB RAM) without building on the server itself.
 
+**Important:** Docker images are built with the exact package versions from `package.json` and `package-lock.json`. To ensure latest security patches are installed, update packages before building:
+
+```bash
+# Update client packages
+cd client && npx npm-check-updates -u && npm install && cd ..
+
+# Update server packages  
+cd server && npx npm-check-updates -u && npm install && cd ..
+```
+
 #### Step 1: Build Images Locally (One-time Setup)
 
 On your local machine with sufficient resources:
@@ -124,15 +134,19 @@ On your local machine with sufficient resources:
 git clone https://github.com/rvllfil/showfolio.git
 cd showfolio
 
-# 2. Set your Docker Hub username
-export DOCKER_USERNAME=your_dockerhub_username
+# 2. Configure environment
+cp .env.example .env
+# Edit .env and set DOCKER_USERNAME=your_dockerhub_username
 
 # 3. Login to Docker Hub
 docker login
 # Enter your Docker Hub username and password
 
-# 4. Build the images
-docker compose -f docker-compose.build.yml build
+# 4. Build the images (using helper script)
+./build-images.sh
+
+# Or manually:
+# DOCKER_USERNAME=your_username docker compose -f docker-compose.build.yml build
 
 # This will take 10-15 minutes. Docker will:
 # - Build Strapi backend (with 1.5GB memory for build)
