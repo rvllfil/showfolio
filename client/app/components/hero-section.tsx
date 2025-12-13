@@ -205,7 +205,7 @@ export function HeroSection({ profileData, skillsData }: HeroSectionProps) {
                         alt={profileData?.brandName || "Profile"}
                         width={60}
                         height={60}
-                        className="border-2 rounded-full border-border object-cover"
+                        className="object-cover border-2 rounded-full border-border"
                         unoptimized
                       />
                       <div className="absolute w-4 h-4 bg-green-500 border-2 rounded-full -bottom-1 -right-1 border-card"></div>
