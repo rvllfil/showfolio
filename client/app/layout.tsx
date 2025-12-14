@@ -15,16 +15,18 @@ export async function generateMetadata(): Promise<Metadata> {
     );
   }
 
-  // Favicon URL from Strapi or fallback to default
+  // Favicon URL from Strapi - support both media format (v4) and direct url (v5)
   const faviconUrl = profileData?.favicon
-    ? `${process.env.NEXT_PUBLIC_API_URL}${profileData.favicon.url}`
+    ? profileData.favicon.url
+      ? `${process.env.NEXT_PUBLIC_API_URL}${profileData.favicon.url}`
+      : profileData.favicon.formats?.thumbnail?.url
+      ? `${process.env.NEXT_PUBLIC_API_URL}${profileData.favicon.formats.thumbnail.url}`
+      : "/favicon.ico"
     : "/favicon.ico";
 
   return {
     title: {
-      default: `${
-        profileData?.brandName || "Showfolio"
-      } – Professional Portfolio & Web Development`,
+      default: `${profileData?.brandName || "Showfolio"}`,
       template: `%s | ${profileData?.brandName || "Showfolio"}`,
     },
     description:
@@ -43,7 +45,11 @@ export async function generateMetadata(): Promise<Metadata> {
     authors: [{ name: profileData?.brandName || "showfolio" }],
     creator: profileData?.brandName || "showfolio",
     icons: {
-      icon: faviconUrl,
+      icon: [
+        { url: faviconUrl },
+        { url: faviconUrl, sizes: "16x16", type: "image/png" },
+        { url: faviconUrl, sizes: "32x32", type: "image/png" },
+      ],
       shortcut: faviconUrl,
       apple: faviconUrl,
     },
@@ -82,13 +88,34 @@ export async function generateMetadata(): Promise<Metadata> {
   };
 }
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
+  // Fetch profile for favicon in head
+  let profileData = null;
+  try {
+    const profile = await getProfile();
+    profileData = profile?.data;
+  } catch (error) {
+    console.warn("Could not fetch profile for favicon");
+  }
+
+  const faviconUrl = profileData?.favicon
+    ? profileData.favicon.url
+      ? `${process.env.NEXT_PUBLIC_API_URL}${profileData.favicon.url}`
+      : "/favicon.ico"
+    : "/favicon.ico";
+
   return (
     <html lang="en" suppressHydrationWarning>
+      <head>
+        <link rel="icon" href={faviconUrl} sizes="any" />
+        <link rel="icon" href={faviconUrl} type="image/png" sizes="32x32" />
+        <link rel="icon" href={faviconUrl} type="image/png" sizes="16x16" />
+        <link rel="apple-touch-icon" href={faviconUrl} />
+      </head>
       <body
         className="min-h-screen antialiased bg-background text-foreground"
         suppressHydrationWarning

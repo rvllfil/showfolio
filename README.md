@@ -1172,6 +1172,64 @@ docker system prune -a --volumes
 3. Click Save & Publish
 4. Refresh frontend
 
+### ❌ Favicon not changing (still showing default icon)
+
+**Symptoms:** Browser tab still shows Next.js default icon even after uploading favicon in Strapi
+
+**Solutions:**
+
+1. **Clear browser cache:**
+
+   **Chrome/Edge:**
+
+   - Press `Ctrl+Shift+Delete` (Windows/Linux) or `Cmd+Shift+Delete` (Mac)
+   - Select "Cached images and files"
+   - Click "Clear data"
+
+   **Or force refresh:**
+
+   - `Ctrl+F5` (Windows/Linux)
+   - `Cmd+Shift+R` (Mac)
+
+2. **Hard reload specific to favicon:**
+
+   - Open DevTools (`F12`)
+   - Right-click refresh button
+   - Select "Empty Cache and Hard Reload"
+
+3. **Check favicon in Strapi:**
+
+   - Content Manager → Profile
+   - Make sure `favicon` field has an image uploaded
+   - File should be `.ico`, `.png`, or `.svg` format
+   - Recommended size: 32x32 or 16x16 pixels
+   - Click Save & Publish
+
+4. **Verify favicon URL:**
+
+   ```bash
+   # Check if favicon is accessible
+   curl -I http://localhost:1337/uploads/favicon_xxxxx.png
+   # Should return 200 OK
+   ```
+
+5. **Restart frontend container:**
+
+   ```bash
+   docker compose restart client
+   ```
+
+6. **Test in incognito/private mode:**
+
+   - Open your site in incognito window
+   - This bypasses browser cache
+
+7. **Add version query parameter:**
+   - If still cached, access: `http://localhost:3000?v=2`
+   - This forces browser to treat it as new page
+
+**Note:** Browsers aggressively cache favicons. It may take 5-10 minutes for changes to appear even after clearing cache.
+
 ### ❌ Container fails to start
 
 **Symptoms:** `docker compose up -d` fails or containers exit immediately
