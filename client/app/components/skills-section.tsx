@@ -9,10 +9,10 @@ import {
   Smartphone,
   Cloud,
 } from "lucide-react";
-import type { Profile, Skill } from "@/lib/types";
+import type { MergedProfileData, Skill } from "@/lib/types";
 
 interface SkillsSectionProps {
-  profileData?: Profile;
+  profileData?: MergedProfileData;
   skillsData?: Skill[];
 }
 

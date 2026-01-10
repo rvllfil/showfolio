@@ -166,6 +166,38 @@
     "contactSocialDescription": {
       "type": "string",
       "default": "Follow me on social media or drop me a message"
+    },
+    "servicesSectionTitle": {
+      "type": "string",
+      "default": "What I Do"
+    },
+    "servicesSectionSubtitle": {
+      "type": "string",
+      "default": "I specialize in building modern web applications with a focus on performance, user experience, and scalable architecture."
+    },
+    "skillsSectionTitle": {
+      "type": "string",
+      "default": "Technical Skills"
+    },
+    "skillsSectionSubtitle": {
+      "type": "string",
+      "default": "A comprehensive toolkit of technologies and tools I use to build exceptional digital experiences"
+    },
+    "testimonialsSectionTitle": {
+      "type": "string",
+      "default": "What Clients Say"
+    },
+    "testimonialsSectionSubtitle": {
+      "type": "string",
+      "default": "Don't just take my word for it. Here's what clients have to say about working with me."
+    },
+    "projectsSectionTitle": {
+      "type": "string",
+      "default": "Featured Projects"
+    },
+    "projectsSectionSubtitle": {
+      "type": "string",
+      "default": "A showcase of my recent work spanning web applications, design systems, and full-stack solutions"
     }
   }
 }

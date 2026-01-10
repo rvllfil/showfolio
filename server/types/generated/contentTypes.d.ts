@@ -430,6 +430,139 @@ export interface AdminUser extends Struct.CollectionTypeSchema {
   };
 }
 
+export interface ApiAboutAbout extends Struct.SingleTypeSchema {
+  collectionName: 'abouts';
+  info: {
+    description: 'About section content for landing page';
+    displayName: 'About Section';
+    pluralName: 'abouts';
+    singularName: 'about';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  attributes: {
+    about: Schema.Attribute.Blocks;
+    aboutSectionSubtitle: Schema.Attribute.String;
+    aboutSectionTitle: Schema.Attribute.String &
+      Schema.Attribute.DefaultTo<'About Me'>;
+    createdAt: Schema.Attribute.DateTime;
+    createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    locale: Schema.Attribute.String & Schema.Attribute.Private;
+    localizations: Schema.Attribute.Relation<'oneToMany', 'api::about.about'> &
+      Schema.Attribute.Private;
+    portfolioNumber: Schema.Attribute.Component<
+      'global.portfolio-number',
+      true
+    >;
+    publishedAt: Schema.Attribute.DateTime;
+    socialLinks: Schema.Attribute.Component<'global.social-links', true>;
+    updatedAt: Schema.Attribute.DateTime;
+    updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    whatIDoList: Schema.Attribute.RichText;
+  };
+}
+
+export interface ApiContactContact extends Struct.SingleTypeSchema {
+  collectionName: 'contacts';
+  info: {
+    description: 'Contact section content for landing page';
+    displayName: 'Contact Section';
+    pluralName: 'contacts';
+    singularName: 'contact';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  attributes: {
+    contactBenefitsDescription1: Schema.Attribute.String &
+      Schema.Attribute.DefaultTo<'Usually within 24 hours'>;
+    contactBenefitsDescription2: Schema.Attribute.String &
+      Schema.Attribute.DefaultTo<'No commitment required'>;
+    contactBenefitsDescription3: Schema.Attribute.String &
+      Schema.Attribute.DefaultTo<'Efficient project delivery'>;
+    contactBenefitsTitle1: Schema.Attribute.String &
+      Schema.Attribute.DefaultTo<'Quick Response'>;
+    contactBenefitsTitle2: Schema.Attribute.String &
+      Schema.Attribute.DefaultTo<'Free Consultation'>;
+    contactBenefitsTitle3: Schema.Attribute.String &
+      Schema.Attribute.DefaultTo<'Fast Turnaround'>;
+    contactCtaDescription: Schema.Attribute.Text &
+      Schema.Attribute.DefaultTo<"Let's discuss your ideas and see how we can collaborate to create something amazing together.">;
+    contactCtaTitle: Schema.Attribute.String &
+      Schema.Attribute.DefaultTo<'Ready to Start Your Project?'>;
+    contactPrimaryButtonLabel: Schema.Attribute.String &
+      Schema.Attribute.DefaultTo<'Send Message'>;
+    contactSecondaryButtonLabel: Schema.Attribute.String &
+      Schema.Attribute.DefaultTo<'Schedule Call'>;
+    contactSectionDescription: Schema.Attribute.Text &
+      Schema.Attribute.DefaultTo<"Have a project in mind? I'd love to hear about it and help bring your ideas to life.">;
+    contactSectionTitle: Schema.Attribute.String &
+      Schema.Attribute.DefaultTo<"Let's Work Together">;
+    contactSocialDescription: Schema.Attribute.String &
+      Schema.Attribute.DefaultTo<'Follow me on social media or drop me a message'>;
+    contactSocialTitle: Schema.Attribute.String &
+      Schema.Attribute.DefaultTo<'Connect With Me'>;
+    createdAt: Schema.Attribute.DateTime;
+    createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    locale: Schema.Attribute.String & Schema.Attribute.Private;
+    localizations: Schema.Attribute.Relation<
+      'oneToMany',
+      'api::contact.contact'
+    > &
+      Schema.Attribute.Private;
+    publishedAt: Schema.Attribute.DateTime;
+    socialLinks: Schema.Attribute.Component<'global.social-links', true>;
+    updatedAt: Schema.Attribute.DateTime;
+    updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+  };
+}
+
+export interface ApiHeroHero extends Struct.SingleTypeSchema {
+  collectionName: 'heroes';
+  info: {
+    description: 'Hero section content for landing page';
+    displayName: 'Hero Section';
+    pluralName: 'heroes';
+    singularName: 'hero';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  attributes: {
+    brandName: Schema.Attribute.String;
+    createdAt: Schema.Attribute.DateTime;
+    createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    heroAvailabilityText: Schema.Attribute.String;
+    heroBackgroundMedia: Schema.Attribute.Media<'images' | 'videos'>;
+    locale: Schema.Attribute.String & Schema.Attribute.Private;
+    localizations: Schema.Attribute.Relation<'oneToMany', 'api::hero.hero'> &
+      Schema.Attribute.Private;
+    portfolioNumber: Schema.Attribute.Component<
+      'global.portfolio-number',
+      true
+    >;
+    primaryCtaLabel: Schema.Attribute.String &
+      Schema.Attribute.DefaultTo<'View My Work'>;
+    primaryCtaUrl: Schema.Attribute.String;
+    profileImage: Schema.Attribute.Media<'images'>;
+    publishedAt: Schema.Attribute.DateTime;
+    secondaryCtaLabel: Schema.Attribute.String &
+      Schema.Attribute.DefaultTo<'Get in Touch'>;
+    secondaryCtaUrl: Schema.Attribute.String;
+    tagline: Schema.Attribute.String;
+    title: Schema.Attribute.String;
+    updatedAt: Schema.Attribute.DateTime;
+    updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+  };
+}
+
 export interface ApiPortfolioPortfolio extends Struct.CollectionTypeSchema {
   collectionName: 'portfolios';
   info: {
@@ -557,12 +690,28 @@ export interface ApiProfileProfile extends Struct.SingleTypeSchema {
     primaryCtaLabel: Schema.Attribute.String;
     primaryCtaUrl: Schema.Attribute.String;
     profileImage: Schema.Attribute.Media<'images'>;
+    projectsSectionSubtitle: Schema.Attribute.String &
+      Schema.Attribute.DefaultTo<'A showcase of my recent work spanning web applications, design systems, and full-stack solutions'>;
+    projectsSectionTitle: Schema.Attribute.String &
+      Schema.Attribute.DefaultTo<'Featured Projects'>;
     publishedAt: Schema.Attribute.DateTime;
     secondaryCtaLabel: Schema.Attribute.String;
     secondaryCtaUrl: Schema.Attribute.String;
+    servicesSectionSubtitle: Schema.Attribute.String &
+      Schema.Attribute.DefaultTo<'I specialize in building modern web applications with a focus on performance, user experience, and scalable architecture.'>;
+    servicesSectionTitle: Schema.Attribute.String &
+      Schema.Attribute.DefaultTo<'What I Do'>;
     shortInfo: Schema.Attribute.Text;
+    skillsSectionSubtitle: Schema.Attribute.String &
+      Schema.Attribute.DefaultTo<'A comprehensive toolkit of technologies and tools I use to build exceptional digital experiences'>;
+    skillsSectionTitle: Schema.Attribute.String &
+      Schema.Attribute.DefaultTo<'Technical Skills'>;
     socialLinks: Schema.Attribute.Component<'global.social-links', true>;
     tagline: Schema.Attribute.String;
+    testimonialsSectionSubtitle: Schema.Attribute.String &
+      Schema.Attribute.DefaultTo<"Don't just take my word for it. Here's what clients have to say about working with me.">;
+    testimonialsSectionTitle: Schema.Attribute.String &
+      Schema.Attribute.DefaultTo<'What Clients Say'>;
     title: Schema.Attribute.String;
     updatedAt: Schema.Attribute.DateTime;
     updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
@@ -955,8 +1104,8 @@ export interface PluginUploadFile extends Struct.CollectionTypeSchema {
     };
   };
   attributes: {
-    alternativeText: Schema.Attribute.String;
-    caption: Schema.Attribute.String;
+    alternativeText: Schema.Attribute.Text;
+    caption: Schema.Attribute.Text;
     createdAt: Schema.Attribute.DateTime;
     createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
@@ -980,7 +1129,7 @@ export interface PluginUploadFile extends Struct.CollectionTypeSchema {
       Schema.Attribute.Private;
     mime: Schema.Attribute.String & Schema.Attribute.Required;
     name: Schema.Attribute.String & Schema.Attribute.Required;
-    previewUrl: Schema.Attribute.String;
+    previewUrl: Schema.Attribute.Text;
     provider: Schema.Attribute.String & Schema.Attribute.Required;
     provider_metadata: Schema.Attribute.JSON;
     publishedAt: Schema.Attribute.DateTime;
@@ -989,7 +1138,7 @@ export interface PluginUploadFile extends Struct.CollectionTypeSchema {
     updatedAt: Schema.Attribute.DateTime;
     updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
-    url: Schema.Attribute.String & Schema.Attribute.Required;
+    url: Schema.Attribute.Text & Schema.Attribute.Required;
     width: Schema.Attribute.Integer;
   };
 }
@@ -1208,6 +1357,9 @@ declare module '@strapi/strapi' {
       'admin::transfer-token': AdminTransferToken;
       'admin::transfer-token-permission': AdminTransferTokenPermission;
       'admin::user': AdminUser;
+      'api::about.about': ApiAboutAbout;
+      'api::contact.contact': ApiContactContact;
+      'api::hero.hero': ApiHeroHero;
       'api::portfolio.portfolio': ApiPortfolioPortfolio;
       'api::profile.profile': ApiProfileProfile;
       'api::service.service': ApiServiceService;

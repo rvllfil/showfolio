@@ -4,10 +4,10 @@ import Image from "next/image";
 import Link from "next/link";
 import { motion } from "framer-motion";
 import { ArrowRight, Code, Palette, Zap, Star } from "lucide-react";
-import { Profile, Skill } from "@/lib/types";
+import { MergedProfileData, Skill } from "@/lib/types";
 
 interface HeroSectionProps {
-  profileData?: Profile;
+  profileData?: MergedProfileData;
   skillsData?: Skill[];
 }
 

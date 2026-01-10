@@ -102,26 +102,75 @@ export interface SectionContent {
   description?: string;
 }
 
-// Content Type: Profile (Single Type)
-export interface Profile {
+// Content Type: Hero Section (Single Type)
+export interface Hero {
   id: number;
   documentId: string;
-  brandName: string;
+  brandName?: string;
   title?: string;
-  tagline: string;
-  shortInfo: string;
-  about: StrapiBlock[];
-  whatIDoList?: string; // richtext HTML
+  tagline?: string;
+  heroAvailabilityText?: string;
   primaryCtaLabel?: string;
   primaryCtaUrl?: string;
   secondaryCtaLabel?: string;
   secondaryCtaUrl?: string;
+  profileImage?: StrapiMedia;
+  heroBackgroundMedia?: StrapiMedia;
+  portfolioNumber?: PortfolioNumber[];
+  createdAt: string;
+  updatedAt: string;
+  publishedAt: string;
+}
+
+// Content Type: About Section (Single Type)
+export interface About {
+  id: number;
+  documentId: string;
+  aboutSectionTitle?: string;
+  aboutSectionSubtitle?: string;
+  about?: StrapiBlock[];
+  whatIDoList?: string;
+  portfolioNumber?: PortfolioNumber[];
+  socialLinks?: SocialLink[];
+  createdAt: string;
+  updatedAt: string;
+  publishedAt: string;
+}
+
+// Content Type: Contact Section (Single Type)
+export interface Contact {
+  id: number;
+  documentId: string;
+  contactSectionTitle?: string;
+  contactSectionDescription?: string;
+  contactBenefitsTitle1?: string;
+  contactBenefitsDescription1?: string;
+  contactBenefitsTitle2?: string;
+  contactBenefitsDescription2?: string;
+  contactBenefitsTitle3?: string;
+  contactBenefitsDescription3?: string;
+  contactCtaTitle?: string;
+  contactCtaDescription?: string;
+  contactPrimaryButtonLabel?: string;
+  contactSecondaryButtonLabel?: string;
+  contactSocialTitle?: string;
+  contactSocialDescription?: string;
+  socialLinks?: SocialLink[];
+  createdAt: string;
+  updatedAt: string;
+  publishedAt: string;
+}
+
+// Content Type: Profile (Single Type) - Global metadata
+export interface Profile {
+  id: number;
+  documentId: string;
+  brandName: string;
+  shortInfo: string;
   lightLogo?: StrapiMedia;
   darkLogo?: StrapiMedia;
   favicon?: StrapiMedia;
-  profileImage?: StrapiMedia;
   socialLinks?: SocialLink[];
-  portfolioNumber?: PortfolioNumber[];
 
   // Navigation labels
   navHomeLabel?: string;
@@ -137,10 +186,7 @@ export interface Profile {
   footerEmailLabel?: string;
   footerPortfolioLabel?: string;
 
-  // Section-specific content
-  heroAvailabilityText?: string;
-  aboutSectionTitle?: string;
-  aboutSectionSubtitle?: string;
+  // Section titles (for sections without dedicated single-types)
   servicesSectionTitle?: string;
   servicesSectionSubtitle?: string;
   projectsSectionTitle?: string;
@@ -149,11 +195,35 @@ export interface Profile {
   skillsSectionSubtitle?: string;
   testimonialsSectionTitle?: string;
   testimonialsSectionSubtitle?: string;
-  contactSectionTitle?: string;
-  contactSectionSubtitle?: string;
-  contactSectionDescription?: string;
 
-  // Contact section content
+  createdAt: string;
+  updatedAt: string;
+  publishedAt: string;
+}
+
+// Merged type for component consumption (backward compatibility)
+export interface MergedProfileData extends Profile {
+  // Hero fields
+  title?: string;
+  tagline?: string;
+  heroAvailabilityText?: string;
+  primaryCtaLabel?: string;
+  primaryCtaUrl?: string;
+  secondaryCtaLabel?: string;
+  secondaryCtaUrl?: string;
+  profileImage?: StrapiMedia;
+  heroBackgroundMedia?: StrapiMedia;
+  portfolioNumber?: PortfolioNumber[];
+
+  // About fields
+  aboutSectionTitle?: string;
+  aboutSectionSubtitle?: string;
+  about?: StrapiBlock[];
+  whatIDoList?: string;
+
+  // Contact fields
+  contactSectionTitle?: string;
+  contactSectionDescription?: string;
   contactBenefitsTitle1?: string;
   contactBenefitsDescription1?: string;
   contactBenefitsTitle2?: string;
@@ -166,10 +236,6 @@ export interface Profile {
   contactSecondaryButtonLabel?: string;
   contactSocialTitle?: string;
   contactSocialDescription?: string;
-
-  createdAt: string;
-  updatedAt: string;
-  publishedAt: string;
 }
 
 // Content Type: Portfolio (Collection Type)

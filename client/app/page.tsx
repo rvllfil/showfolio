@@ -1,9 +1,13 @@
 import {
   getProfile,
+  getHero,
+  getAbout,
+  getContact,
   getFeaturedPortfolio,
   getSkills,
   getTestimonials,
   getServices,
+  mergeProfileData,
 } from "@/lib/api";
 import { Navbar } from "@/app/components/navbar";
 import { HeroSection } from "@/app/components/hero-section";
@@ -17,17 +21,35 @@ import { Footer } from "@/app/components/footer";
 
 export default async function HomePage() {
   // Fetch all data in parallel for better performance
-  let profile, featuredPortfolio, skills, testimonials, services;
+  let profile,
+    hero,
+    about,
+    contact,
+    featuredPortfolio,
+    skills,
+    testimonials,
+    services;
 
   try {
-    [profile, featuredPortfolio, skills, testimonials, services] =
-      await Promise.all([
-        getProfile(),
-        getFeaturedPortfolio(),
-        getSkills(),
-        getTestimonials(),
-        getServices(),
-      ]);
+    [
+      profile,
+      hero,
+      about,
+      contact,
+      featuredPortfolio,
+      skills,
+      testimonials,
+      services,
+    ] = await Promise.all([
+      getProfile(),
+      getHero(),
+      getAbout(),
+      getContact(),
+      getFeaturedPortfolio(),
+      getSkills(),
+      getTestimonials(),
+      getServices(),
+    ]);
   } catch (error) {
     console.warn(
       "Could not fetch data during build/runtime, using defaults.",
@@ -35,7 +57,13 @@ export default async function HomePage() {
     );
   }
 
-  const profileData = profile?.data ?? null;
+  // Merge section data with profile for backward compatibility
+  const profileData = mergeProfileData(
+    profile?.data ?? null,
+    hero?.data ?? null,
+    about?.data ?? null,
+    contact?.data ?? null
+  );
   const featuredItems = featuredPortfolio?.data ?? [];
   const skillsData = skills?.data ?? [];
   const testimonialsData = testimonials?.data ?? [];
@@ -48,7 +76,7 @@ export default async function HomePage() {
         <HeroSection
           profileData={profileData ?? undefined}
           skillsData={skillsData}
-      />
+        />
         <AboutSection
           profileData={profileData ?? undefined}
           featuredItemsCount={featuredItems.length}

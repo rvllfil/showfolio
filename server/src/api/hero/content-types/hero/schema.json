@@ -1,0 +1,57 @@
+{
+  "kind": "singleType",
+  "collectionName": "heroes",
+  "info": {
+    "singularName": "hero",
+    "pluralName": "heroes",
+    "displayName": "Hero Section",
+    "description": "Hero section content for landing page"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "brandName": {
+      "type": "string"
+    },
+    "title": {
+      "type": "string"
+    },
+    "tagline": {
+      "type": "string"
+    },
+    "heroAvailabilityText": {
+      "type": "string"
+    },
+    "primaryCtaLabel": {
+      "type": "string",
+      "default": "View My Work"
+    },
+    "primaryCtaUrl": {
+      "type": "string"
+    },
+    "secondaryCtaLabel": {
+      "type": "string",
+      "default": "Get in Touch"
+    },
+    "secondaryCtaUrl": {
+      "type": "string"
+    },
+    "profileImage": {
+      "type": "media",
+      "multiple": false,
+      "allowedTypes": ["images"]
+    },
+    "heroBackgroundMedia": {
+      "type": "media",
+      "multiple": false,
+      "allowedTypes": ["images", "videos"]
+    },
+    "portfolioNumber": {
+      "type": "component",
+      "component": "global.portfolio-number",
+      "repeatable": true
+    }
+  }
+}

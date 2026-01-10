@@ -3,7 +3,7 @@
 import { motion } from "framer-motion";
 import { Quote } from "lucide-react";
 import Image from "next/image";
-import type { Testimonial, Profile } from "@/lib/types";
+import type { Testimonial, MergedProfileData } from "@/lib/types";
 import { renderBlocksAsText } from "@/lib/strapi-helpers";
 
 // Placeholder testimonials - use when no Strapi data available

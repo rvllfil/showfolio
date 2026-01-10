@@ -7,10 +7,10 @@ import { useTheme } from "next-themes";
 import { Logo } from "@/app/components/ui/logo";
 import { Menu, X } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Profile } from "@/lib/types";
+import { MergedProfileData } from "@/lib/types";
 
 interface NavbarProps {
-  profileData: Profile | null;
+  profileData: MergedProfileData | null;
 }
 
 // Navigation items will be generated dynamically from profileData

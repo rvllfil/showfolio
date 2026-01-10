@@ -1,0 +1,77 @@
+{
+  "kind": "singleType",
+  "collectionName": "contacts",
+  "info": {
+    "singularName": "contact",
+    "pluralName": "contacts",
+    "displayName": "Contact Section",
+    "description": "Contact section content for landing page"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "contactSectionTitle": {
+      "type": "string",
+      "default": "Let's Work Together"
+    },
+    "contactSectionDescription": {
+      "type": "text",
+      "default": "Have a project in mind? I'd love to hear about it and help bring your ideas to life."
+    },
+    "contactBenefitsTitle1": {
+      "type": "string",
+      "default": "Quick Response"
+    },
+    "contactBenefitsDescription1": {
+      "type": "string",
+      "default": "Usually within 24 hours"
+    },
+    "contactBenefitsTitle2": {
+      "type": "string",
+      "default": "Free Consultation"
+    },
+    "contactBenefitsDescription2": {
+      "type": "string",
+      "default": "No commitment required"
+    },
+    "contactBenefitsTitle3": {
+      "type": "string",
+      "default": "Fast Turnaround"
+    },
+    "contactBenefitsDescription3": {
+      "type": "string",
+      "default": "Efficient project delivery"
+    },
+    "contactCtaTitle": {
+      "type": "string",
+      "default": "Ready to Start Your Project?"
+    },
+    "contactCtaDescription": {
+      "type": "text",
+      "default": "Let's discuss your ideas and see how we can collaborate to create something amazing together."
+    },
+    "contactPrimaryButtonLabel": {
+      "type": "string",
+      "default": "Send Message"
+    },
+    "contactSecondaryButtonLabel": {
+      "type": "string",
+      "default": "Schedule Call"
+    },
+    "contactSocialTitle": {
+      "type": "string",
+      "default": "Connect With Me"
+    },
+    "contactSocialDescription": {
+      "type": "string",
+      "default": "Follow me on social media or drop me a message"
+    },
+    "socialLinks": {
+      "type": "component",
+      "component": "global.social-links",
+      "repeatable": true
+    }
+  }
+}

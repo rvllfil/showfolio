@@ -14,11 +14,11 @@ import {
   Sparkles,
   CheckCircle,
 } from "lucide-react";
-import type { Profile, Service } from "@/lib/types";
+import type { MergedProfileData, Service } from "@/lib/types";
 import { renderBlocksAsText } from "@/lib/strapi-helpers";
 
 interface ServicesSectionProps {
-  profileData?: Profile;
+  profileData?: MergedProfileData;
   servicesData: Service[]; // Required, but HomePage ensures it's not empty
 }
 

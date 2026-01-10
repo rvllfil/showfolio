@@ -2,10 +2,14 @@ import type {
   StrapiResponse,
   StrapiCollectionResponse,
   Profile,
+  Hero,
+  About,
+  Contact,
   Portfolio,
   Skill,
   Testimonial,
   Service,
+  MergedProfileData,
 } from "./types";
 
 // Use different API URLs for server-side vs client-side
@@ -66,6 +70,125 @@ export async function getProfile(
   }
 
   return fetchAPI(`/api/profile?${query.toString()}`);
+}
+
+// Ambil Hero Section (single type)
+export async function getHero(): Promise<StrapiResponse<Hero>> {
+  try {
+    return await fetchAPI("/api/hero?populate=*");
+  } catch (error) {
+    console.warn("Hero section not found, will use fallback");
+    return { data: {} as Hero };
+  }
+}
+
+// Ambil About Section (single type)
+export async function getAbout(): Promise<StrapiResponse<About>> {
+  try {
+    return await fetchAPI("/api/about?populate=*");
+  } catch (error) {
+    console.warn("About section not found, will use fallback");
+    return { data: {} as About };
+  }
+}
+
+// Ambil Contact Section (single type)
+export async function getContact(): Promise<StrapiResponse<Contact>> {
+  try {
+    return await fetchAPI("/api/contact?populate=*");
+  } catch (error) {
+    console.warn("Contact section not found, will use fallback");
+    return { data: {} as Contact };
+  }
+}
+
+// Helper to merge section data with profile for backward compatibility
+export function mergeProfileData(
+  profile: Profile | null,
+  hero: Hero | null,
+  about: About | null,
+  contact: Contact | null
+): MergedProfileData | null {
+  if (!profile) return null;
+
+  return {
+    ...profile,
+    // Hero fields
+    ...(hero?.brandName && { brandName: hero.brandName }),
+    ...(hero?.title && { title: hero.title }),
+    ...(hero?.tagline && { tagline: hero.tagline }),
+    ...(hero?.heroAvailabilityText && {
+      heroAvailabilityText: hero.heroAvailabilityText,
+    }),
+    ...(hero?.primaryCtaLabel && { primaryCtaLabel: hero.primaryCtaLabel }),
+    ...(hero?.primaryCtaUrl && { primaryCtaUrl: hero.primaryCtaUrl }),
+    ...(hero?.secondaryCtaLabel && {
+      secondaryCtaLabel: hero.secondaryCtaLabel,
+    }),
+    ...(hero?.secondaryCtaUrl && { secondaryCtaUrl: hero.secondaryCtaUrl }),
+    ...(hero?.profileImage && { profileImage: hero.profileImage }),
+    ...(hero?.heroBackgroundMedia && {
+      heroBackgroundMedia: hero.heroBackgroundMedia,
+    }),
+    ...(hero?.portfolioNumber && { portfolioNumber: hero.portfolioNumber }),
+    // About fields
+    ...(about?.aboutSectionTitle && {
+      aboutSectionTitle: about.aboutSectionTitle,
+    }),
+    ...(about?.aboutSectionSubtitle && {
+      aboutSectionSubtitle: about.aboutSectionSubtitle,
+    }),
+    ...(about?.about && { about: about.about }),
+    ...(about?.whatIDoList && { whatIDoList: about.whatIDoList }),
+    ...(about?.portfolioNumber &&
+      !hero?.portfolioNumber && { portfolioNumber: about.portfolioNumber }),
+    ...(about?.socialLinks && { socialLinks: about.socialLinks }),
+    // Contact fields
+    ...(contact?.contactSectionTitle && {
+      contactSectionTitle: contact.contactSectionTitle,
+    }),
+    ...(contact?.contactSectionDescription && {
+      contactSectionDescription: contact.contactSectionDescription,
+    }),
+    ...(contact?.contactBenefitsTitle1 && {
+      contactBenefitsTitle1: contact.contactBenefitsTitle1,
+    }),
+    ...(contact?.contactBenefitsDescription1 && {
+      contactBenefitsDescription1: contact.contactBenefitsDescription1,
+    }),
+    ...(contact?.contactBenefitsTitle2 && {
+      contactBenefitsTitle2: contact.contactBenefitsTitle2,
+    }),
+    ...(contact?.contactBenefitsDescription2 && {
+      contactBenefitsDescription2: contact.contactBenefitsDescription2,
+    }),
+    ...(contact?.contactBenefitsTitle3 && {
+      contactBenefitsTitle3: contact.contactBenefitsTitle3,
+    }),
+    ...(contact?.contactBenefitsDescription3 && {
+      contactBenefitsDescription3: contact.contactBenefitsDescription3,
+    }),
+    ...(contact?.contactCtaTitle && {
+      contactCtaTitle: contact.contactCtaTitle,
+    }),
+    ...(contact?.contactCtaDescription && {
+      contactCtaDescription: contact.contactCtaDescription,
+    }),
+    ...(contact?.contactPrimaryButtonLabel && {
+      contactPrimaryButtonLabel: contact.contactPrimaryButtonLabel,
+    }),
+    ...(contact?.contactSecondaryButtonLabel && {
+      contactSecondaryButtonLabel: contact.contactSecondaryButtonLabel,
+    }),
+    ...(contact?.contactSocialTitle && {
+      contactSocialTitle: contact.contactSocialTitle,
+    }),
+    ...(contact?.contactSocialDescription && {
+      contactSocialDescription: contact.contactSocialDescription,
+    }),
+    ...(contact?.socialLinks &&
+      !about?.socialLinks && { socialLinks: contact.socialLinks }),
+  };
 }
 
 // Ambil semua PortfolioItem

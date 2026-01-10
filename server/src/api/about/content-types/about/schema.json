@@ -1,0 +1,39 @@
+{
+  "kind": "singleType",
+  "collectionName": "abouts",
+  "info": {
+    "singularName": "about",
+    "pluralName": "abouts",
+    "displayName": "About Section",
+    "description": "About section content for landing page"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "aboutSectionTitle": {
+      "type": "string",
+      "default": "About Me"
+    },
+    "aboutSectionSubtitle": {
+      "type": "string"
+    },
+    "about": {
+      "type": "blocks"
+    },
+    "whatIDoList": {
+      "type": "richtext"
+    },
+    "portfolioNumber": {
+      "type": "component",
+      "component": "global.portfolio-number",
+      "repeatable": true
+    },
+    "socialLinks": {
+      "type": "component",
+      "component": "global.social-links",
+      "repeatable": true
+    }
+  }
+}

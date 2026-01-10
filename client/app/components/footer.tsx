@@ -3,10 +3,10 @@
 import Link from "next/link";
 import { Github, Linkedin, Mail, Twitter, ArrowUp } from "lucide-react";
 import { Logo } from "@/app/components/ui/logo";
-import type { Profile } from "@/lib/types";
+import type { MergedProfileData } from "@/lib/types";
 
 interface FooterProps {
-  profileData?: Profile;
+  profileData?: MergedProfileData;
 }
 
 export function Footer({ profileData }: FooterProps) {

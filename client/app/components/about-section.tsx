@@ -15,10 +15,10 @@ import {
   Youtube,
   MessageCircle,
 } from "lucide-react";
-import type { Profile, StrapiBlock } from "@/lib/types";
+import type { MergedProfileData, StrapiBlock } from "@/lib/types";
 
 interface AboutSectionProps {
-  profileData?: Profile;
+  profileData?: MergedProfileData;
   featuredItemsCount: number;
 }
 

@@ -17,9 +17,10 @@ import {
   Globe,
   Send,
 } from "lucide-react";
+import type { MergedProfileData } from "@/lib/types";
 
 interface ContactSectionProps {
-  profileData?: any;
+  profileData?: MergedProfileData;
 }
 
 export function ContactSection({ profileData }: ContactSectionProps) {
@@ -262,9 +263,8 @@ export function ContactSection({ profileData }: ContactSectionProps) {
                   "Follow me on social media or drop me a message"}
               </p>
               <div className="flex flex-wrap justify-center gap-4">
-                {profileData.socialLinks.map((link: any, index: number) => {
-                  const platformName =
-                    link.platform || link.label || link.iconKey || "Social";
+                {profileData.socialLinks.map((link, index: number) => {
+                  const platformName = link.label || link.iconKey || "Social";
                   const Icon = getIconForPlatform(platformName);
                   const colors = getColorForPlatform(platformName);
 

@@ -4,10 +4,10 @@ import Image from "next/image";
 import Link from "next/link";
 import { motion } from "framer-motion";
 import { ExternalLink, Github } from "lucide-react";
-import type { Portfolio, Profile } from "@/lib/types";
+import type { Portfolio, MergedProfileData } from "@/lib/types";
 
 interface ProjectsSectionProps {
-  profileData?: Profile;
+  profileData?: MergedProfileData;
   featuredItems: Portfolio[];
 }
 
@@ -65,7 +65,7 @@ export function ProjectsSection({
           viewport={{ once: true, margin: "-100px" }}
           className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 mb-12"
         >
-          {featuredItems?.slice(0, 3).map((project: any, index: number) => (
+          {featuredItems?.slice(0, 3).map((project, index: number) => (
             <motion.div
               key={project.id}
               variants={item}
@@ -147,7 +147,7 @@ export function ProjectsSection({
                     <div className="flex flex-wrap gap-2">
                       {project.techTags
                         ?.slice(0, 4)
-                        .map((tech: any, techIndex: number) => (
+                        .map((tech, techIndex: number) => (
                           <span
                             key={techIndex}
                             className="px-3 py-1 text-xs font-medium bg-primary/10 text-primary rounded-full border border-primary/20 hover:bg-primary/20 transition-colors"
