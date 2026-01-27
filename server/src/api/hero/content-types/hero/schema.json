@@ -12,17 +12,16 @@
   },
   "pluginOptions": {},
   "attributes": {
-    "brandName": {
+    "headline": {
       "type": "string"
     },
-    "title": {
+    "subHeadline": {
       "type": "string"
     },
-    "tagline": {
-      "type": "string"
-    },
-    "heroAvailabilityText": {
-      "type": "string"
+    "techTags": {
+      "type": "component",
+      "component": "global.tech-tags",
+      "repeatable": true
     },
     "primaryCtaLabel": {
       "type": "string",
@@ -37,21 +36,6 @@
     },
     "secondaryCtaUrl": {
       "type": "string"
-    },
-    "profileImage": {
-      "type": "media",
-      "multiple": false,
-      "allowedTypes": ["images"]
-    },
-    "heroBackgroundMedia": {
-      "type": "media",
-      "multiple": false,
-      "allowedTypes": ["images", "videos"]
-    },
-    "portfolioNumber": {
-      "type": "component",
-      "component": "global.portfolio-number",
-      "repeatable": true
     }
   }
 }

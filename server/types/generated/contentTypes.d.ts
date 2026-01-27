@@ -534,29 +534,22 @@ export interface ApiHeroHero extends Struct.SingleTypeSchema {
     draftAndPublish: true;
   };
   attributes: {
-    brandName: Schema.Attribute.String;
     createdAt: Schema.Attribute.DateTime;
     createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
-    heroAvailabilityText: Schema.Attribute.String;
-    heroBackgroundMedia: Schema.Attribute.Media<'images' | 'videos'>;
+    headline: Schema.Attribute.String;
     locale: Schema.Attribute.String & Schema.Attribute.Private;
     localizations: Schema.Attribute.Relation<'oneToMany', 'api::hero.hero'> &
       Schema.Attribute.Private;
-    portfolioNumber: Schema.Attribute.Component<
-      'global.portfolio-number',
-      true
-    >;
     primaryCtaLabel: Schema.Attribute.String &
       Schema.Attribute.DefaultTo<'View My Work'>;
     primaryCtaUrl: Schema.Attribute.String;
-    profileImage: Schema.Attribute.Media<'images'>;
     publishedAt: Schema.Attribute.DateTime;
     secondaryCtaLabel: Schema.Attribute.String &
       Schema.Attribute.DefaultTo<'Get in Touch'>;
     secondaryCtaUrl: Schema.Attribute.String;
-    tagline: Schema.Attribute.String;
-    title: Schema.Attribute.String;
+    subHeadline: Schema.Attribute.String;
+    techTags: Schema.Attribute.Component<'global.tech-tags', true>;
     updatedAt: Schema.Attribute.DateTime;
     updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;

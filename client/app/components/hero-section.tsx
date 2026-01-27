@@ -4,7 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { motion } from "framer-motion";
 import { ArrowRight, Code, Palette, Zap, Star } from "lucide-react";
-import { MergedProfileData, Skill } from "@/lib/types";
+import { MergedProfileData, Skill, TechTag } from "@/lib/types";
 
 interface HeroSectionProps {
   profileData?: MergedProfileData;
@@ -48,47 +48,68 @@ export function HeroSection({ profileData, skillsData }: HeroSectionProps) {
               className="space-y-6"
             >
               <h1 className="text-4xl font-bold tracking-tight sm:text-5xl lg:text-6xl">
-                {profileData?.brandName ? (
+                {profileData?.headline ? (
                   <>
-                    <span className="block">Hi, I&apos;m</span>
-                    <span className="block text-primary">
-                      {profileData.brandName}
-                    </span>
+                    <span className="block">{profileData.headline}</span>
                   </>
                 ) : (
                   <>
-                    <span className="block">Building</span>
-                    <span className="block text-primary">exceptional</span>
-                    <span className="block">web experiences</span>
+                    <span className="block">Lorem ipsum dolor</span>
                   </>
                 )}
               </h1>
 
               <p className="max-w-2xl text-lg text-muted-foreground sm:text-xl">
-                {profileData?.tagline ||
-                  "Full-stack developer specializing in modern web technologies. I create fast, scalable, and user-friendly applications that solve real business problems."}
+                {profileData?.subHeadline ||
+                  "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."}
               </p>
             </motion.div>
 
             {/* Stats */}
             {profileData?.portfolioNumber &&
-              profileData.portfolioNumber.length > 0 && (
-                <motion.div
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.5, delay: 0.2 }}
-                  className="grid grid-cols-3 gap-8 py-8 border-y border-border"
-                >
-                  {profileData.portfolioNumber.slice(0, 3).map((stat) => (
-                    <div key={stat.id}>
-                      <div className="text-2xl font-bold">{stat.value}</div>
-                      <div className="text-sm text-muted-foreground">
-                        {stat.label}
-                      </div>
+            profileData.portfolioNumber.length > 0 ? (
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5, delay: 0.2 }}
+                className="grid grid-cols-3 gap-8 py-8 border-y border-border"
+              >
+                {profileData.portfolioNumber.slice(0, 3).map((stat) => (
+                  <div key={stat.id}>
+                    <div className="text-2xl font-bold">{stat.value}</div>
+                    <div className="text-sm text-muted-foreground">
+                      {stat.label}
                     </div>
-                  ))}
-                </motion.div>
-              )}
+                  </div>
+                ))}
+              </motion.div>
+            ) : (
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5, delay: 0.2 }}
+                className="grid grid-cols-3 gap-8 py-8 border-y border-border"
+              >
+                <div>
+                  <div className="text-2xl font-bold">99+</div>
+                  <div className="text-sm text-muted-foreground">
+                    Years Experience
+                  </div>
+                </div>
+                <div>
+                  <div className="text-2xl font-bold">99+</div>
+                  <div className="text-sm text-muted-foreground">
+                    Projects Completed
+                  </div>
+                </div>
+                <div>
+                  <div className="text-2xl font-bold">99+</div>
+                  <div className="text-sm text-muted-foreground">
+                    Happy Clients
+                  </div>
+                </div>
+              </motion.div>
+            )}
 
             {/* CTA Buttons */}
             <motion.div
@@ -116,14 +137,35 @@ export function HeroSection({ profileData, skillsData }: HeroSectionProps) {
               )}
             </motion.div>
 
-            {/* Skills Preview */}
+            {/* Skills / Tech Stack Preview */}
             <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ duration: 0.5, delay: 0.4 }}
               className="flex flex-wrap gap-2"
             >
-              {skillsData && skillsData.length > 0 ? (
+              {/* If hero has techTags from Strapi use it */}
+              {profileData?.techTags && profileData.techTags.length > 0 ? (
+                profileData.techTags.slice(0, 8).map((tag: TechTag) => {
+                  const iconMap: Record<string, React.ReactNode> = {
+                    frontend: <Code className="w-3 h-3" />,
+                    backend: <Code className="w-3 h-3" />,
+                    cms: <Palette className="w-3 h-3" />,
+                    ecommerce: <Zap className="w-3 h-3" />,
+                    tool: <Star className="w-3 h-3" />,
+                  };
+
+                  return (
+                    <span
+                      key={tag.id}
+                      className="inline-flex items-center gap-2 px-3 py-1 text-xs font-medium border rounded-full border-border bg-background"
+                    >
+                      {iconMap[tag.category] || <Code className="w-3 h-3" />}
+                      {tag.name}
+                    </span>
+                  );
+                })
+              ) : skillsData && skillsData.length > 0 ? (
                 skillsData.slice(0, 6).map((skill) => {
                   // Map category to icon
                   const iconMap: Record<string, React.ReactNode> = {

@@ -23,7 +23,7 @@ const API_URL =
 // Opsional: cek kalau API_URL belum di-set
 if (!API_URL) {
   throw new Error(
-    "API_URL or NEXT_PUBLIC_API_URL is not defined. Please set it in environment variables"
+    "API_URL or NEXT_PUBLIC_API_URL is not defined. Please set it in environment variables",
   );
 }
 
@@ -34,7 +34,7 @@ if (!API_URL) {
  */
 export async function fetchAPI(
   path: string,
-  options: RequestInit & { next?: Record<string, unknown> } = {}
+  options: RequestInit & { next?: Record<string, unknown> } = {},
 ) {
   const url = `${API_URL}${path}`;
 
@@ -58,7 +58,7 @@ export async function fetchAPI(
 
 // Ambil Profile (single type)
 export async function getProfile(
-  locale?: string
+  locale?: string,
 ): Promise<StrapiResponse<Profile>> {
   const query = new URLSearchParams({
     populate: "*",
@@ -107,30 +107,22 @@ export function mergeProfileData(
   profile: Profile | null,
   hero: Hero | null,
   about: About | null,
-  contact: Contact | null
+  contact: Contact | null,
 ): MergedProfileData | null {
   if (!profile) return null;
 
   return {
     ...profile,
-    // Hero fields
-    ...(hero?.brandName && { brandName: hero.brandName }),
-    ...(hero?.title && { title: hero.title }),
-    ...(hero?.tagline && { tagline: hero.tagline }),
-    ...(hero?.heroAvailabilityText && {
-      heroAvailabilityText: hero.heroAvailabilityText,
-    }),
+    // Hero fields (mapped from new hero single-type)
+    ...(hero?.headline && { headline: hero.headline }),
+    ...(hero?.subHeadline && { subHeadline: hero.subHeadline }),
     ...(hero?.primaryCtaLabel && { primaryCtaLabel: hero.primaryCtaLabel }),
     ...(hero?.primaryCtaUrl && { primaryCtaUrl: hero.primaryCtaUrl }),
     ...(hero?.secondaryCtaLabel && {
       secondaryCtaLabel: hero.secondaryCtaLabel,
     }),
     ...(hero?.secondaryCtaUrl && { secondaryCtaUrl: hero.secondaryCtaUrl }),
-    ...(hero?.profileImage && { profileImage: hero.profileImage }),
-    ...(hero?.heroBackgroundMedia && {
-      heroBackgroundMedia: hero.heroBackgroundMedia,
-    }),
-    ...(hero?.portfolioNumber && { portfolioNumber: hero.portfolioNumber }),
+    ...(hero?.techTags && { techTags: hero.techTags }),
     // About fields
     ...(about?.aboutSectionTitle && {
       aboutSectionTitle: about.aboutSectionTitle,
@@ -203,16 +195,16 @@ export async function getFeaturedPortfolio(): Promise<
   StrapiCollectionResponse<Portfolio>
 > {
   return fetchAPI(
-    "/api/portfolios?filters[isFeatured][$eq]=true&populate=*&sort=year:desc"
+    "/api/portfolios?filters[isFeatured][$eq]=true&populate=*&sort=year:desc",
   );
 }
 
 // Ambil portfolio item berdasarkan slug
 export async function getPortfolioItemBySlug(
-  slug: string
+  slug: string,
 ): Promise<Portfolio | null> {
   const response = await fetchAPI(
-    `/api/portfolios?filters[slug][$eq]=${slug}&populate=*`
+    `/api/portfolios?filters[slug][$eq]=${slug}&populate=*`,
   );
   return response.data?.[0] || null;
 }

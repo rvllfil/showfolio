@@ -106,17 +106,13 @@ export interface SectionContent {
 export interface Hero {
   id: number;
   documentId: string;
-  brandName?: string;
-  title?: string;
-  tagline?: string;
-  heroAvailabilityText?: string;
+  headline?: string;
+  subHeadline?: string;
   primaryCtaLabel?: string;
   primaryCtaUrl?: string;
   secondaryCtaLabel?: string;
   secondaryCtaUrl?: string;
-  profileImage?: StrapiMedia;
-  heroBackgroundMedia?: StrapiMedia;
-  portfolioNumber?: PortfolioNumber[];
+  techTags?: TechTag[];
   createdAt: string;
   updatedAt: string;
   publishedAt: string;
@@ -166,11 +162,21 @@ export interface Profile {
   id: number;
   documentId: string;
   brandName: string;
+  title?: string;
+  tagline?: string;
   shortInfo: string;
+  about?: StrapiBlock[];
+  whatIDoList?: string;
+  primaryCtaLabel?: string;
+  primaryCtaUrl?: string;
+  secondaryCtaLabel?: string;
+  secondaryCtaUrl?: string;
+  socialLinks?: SocialLink[];
+  portfolioNumber?: PortfolioNumber[];
+  profileImage?: StrapiMedia;
   lightLogo?: StrapiMedia;
   darkLogo?: StrapiMedia;
   favicon?: StrapiMedia;
-  socialLinks?: SocialLink[];
 
   // Navigation labels
   navHomeLabel?: string;
@@ -185,6 +191,22 @@ export interface Profile {
   footerContactTitle?: string;
   footerEmailLabel?: string;
   footerPortfolioLabel?: string;
+
+  // Contact fields
+  contactSectionTitle?: string;
+  contactSectionDescription?: string;
+  contactBenefitsTitle1?: string;
+  contactBenefitsDescription1?: string;
+  contactBenefitsTitle2?: string;
+  contactBenefitsDescription2?: string;
+  contactBenefitsTitle3?: string;
+  contactBenefitsDescription3?: string;
+  contactCtaTitle?: string;
+  contactCtaDescription?: string;
+  contactPrimaryButtonLabel?: string;
+  contactSecondaryButtonLabel?: string;
+  contactSocialTitle?: string;
+  contactSocialDescription?: string;
 
   // Section titles (for sections without dedicated single-types)
   servicesSectionTitle?: string;
@@ -204,8 +226,8 @@ export interface Profile {
 // Merged type for component consumption (backward compatibility)
 export interface MergedProfileData extends Profile {
   // Hero fields
-  title?: string;
-  tagline?: string;
+  headline?: string;
+  subHeadline?: string;
   heroAvailabilityText?: string;
   primaryCtaLabel?: string;
   primaryCtaUrl?: string;
@@ -214,6 +236,7 @@ export interface MergedProfileData extends Profile {
   profileImage?: StrapiMedia;
   heroBackgroundMedia?: StrapiMedia;
   portfolioNumber?: PortfolioNumber[];
+  techTags?: TechTag[];
 
   // About fields
   aboutSectionTitle?: string;
@@ -244,14 +267,19 @@ export interface Portfolio {
   documentId: string;
   title: string;
   slug: string;
-  workType: "Real" | "Dummy";
+  workType: "real" | "dummy";
   shortDescription: string;
   detailedDescription: StrapiBlock[];
   problem: StrapiBlock[];
   solution: StrapiBlock[];
   role: string;
   year: string;
-  portfolioType: "landing_page" | "commerce" | "web_app";
+  portfolioType:
+    | "website"
+    | "landing_page"
+    | "commerce"
+    | "ecommerce"
+    | "web_app";
   techTags?: TechTag[];
   isFeatured: boolean;
   liveUrl?: string;
